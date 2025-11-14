@@ -64,7 +64,7 @@ def editEmpleado():
     apellido = input_no_vacio("Nuevo apellido: ")
     if apellido is None: return
 
-    direccion = input_no_vacio("Nueva dirección: ")
+    direccion = input_no_vacio("Nueva direccion: ")
     if direccion is None: return
 
     email = input_no_vacio("Nuevo email: ")
@@ -73,7 +73,7 @@ def editEmpleado():
     salario = input_no_vacio("Nuevo salario: ")
     if salario is None: return
 
-    telefono = input("Nuevo teléfono (opcional): ").strip()
+    telefono = input("Nuevo telefono (opcional): ").strip()
     if telefono == "":
         telefono = None
 

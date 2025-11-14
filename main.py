@@ -1,4 +1,3 @@
-import time
 from app.vista import view_departamento as vd
 from app.vista import view_empleado as ve
 #le da un alias a cada view para evitar malas practicas de repeticion
@@ -6,12 +5,12 @@ from app.vista import view_empleado as ve
 while True:
 
     print("""MENU ECOTECH
-      ¡Seleccione una de las opciones!
-      1. Departamentos
-      2. Empleados
-      3. Usuarios
-      4. Proyectos
-      5. Salir""")
+          ¡Seleccione una de las opciones!
+          1. Departamentos
+          2. Empleados
+          3. Usuarios
+          4. Proyectos
+          5. Salir""")
 
     try:
         opc = int(input("Seleccione una opcion: "))
@@ -19,17 +18,18 @@ while True:
         print("Error: ingrese un numero valido.")
         continue
 
-    # --- MENU DEPARTAMENTOS ---
+    # --- MENU DEPARTAMENTOS --------------------------------------------------------------------------
+
     if opc == 1:
         while True:
             print("""
-                    Menu de Departamentos:
-                    1. Agregar departamento
-                    2. Editar departamento
-                    3. Eliminar departamento
-                    4. Ver departamentos
-                    5. Volver al menu principal
-                    """)
+                  Menu de Departamentos:
+                  1. Agregar departamento
+                  2. Editar departamento
+                  3. Eliminar departamento
+                  4. Ver departamentos
+                  5. Volver al menu principal
+                  """)
 
             try:
                 sub_opc = int(input("Seleccione una opcion: "))
@@ -50,18 +50,18 @@ while True:
             else:
                 print("Opcion no valida.")
 
-    # --- MENU EMPLEADOS --------------------------------------------------------------------------
+    # --- MENU EMPLEADOS -----------------------------------------------------------------------------
 
     elif opc == 2:
         while True:
             print("""
-            Menu Empleados:
-            1. Agregar empleado
-            2. Editar empleado
-            3. Eliminar empleado
-            4. Ver empleados
-            5. Volver al menu principal
-            """)
+                  Menu Empleados:
+                  1. Agregar empleado
+                  2. Editar empleado
+                  3. Eliminar empleado
+                  4. Ver empleados
+                  5. Volver al menu principal
+                  """)
 
             try:
                 sub_opc = int(input("Seleccione una opcion: "))
@@ -83,7 +83,8 @@ while True:
                 print("Opcion no valida.")
 
     # elif opc == 3:
-    ##elif opc == 4;
+    # elif opc == 4;
+
     elif opc == 5:
         print("Saliendo...")
         break

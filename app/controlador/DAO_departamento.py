@@ -11,11 +11,10 @@ def agregarDepartamento(departamento:departamento):
                  VALUES (%s, %s, %s, %s)"""
         cone = getConexion()
         cursor = cone.cursor()
-        cursor.execute(sql,(
-            departamento.get_id_depart(),
-            departamento.get_proposito_depart(),
-            departamento.get_nombre_depart(),
-            departamento.get_gerente_asociado()
+        cursor.execute(sql,(departamento.get_id_depart(),
+                            departamento.get_proposito_depart(),
+                            departamento.get_nombre_depart(),
+                            departamento.get_gerente_asociado()
         ))
         cone.commit()
         cursor.close()
@@ -27,8 +26,9 @@ def agregarDepartamento(departamento:departamento):
         print(f"Error: {ex}")
     
         return False
-##_________________________________________________________## 
-#    
+##_________________________________________________________##
+##_________________________________________________________##  
+    
 def verDepartamento():
     try:
         sql = "SELECT * FROM departamento"
@@ -61,7 +61,8 @@ def editarDepartamento(departamento:departamento):
     except mysql.connector.Error as ex:
         print(f"Error:{ex}")
 
-##_________________________________________________________## 
+##_________________________________________________________##
+##_________________________________________________________##  
 
 def eliminarDepartamento(id_depart: str):
     try:
