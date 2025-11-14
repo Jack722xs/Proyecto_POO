@@ -11,3 +11,5 @@ def getConexion():
         return cone
     except mysql.connector.Error as ex:
         print(f"Error: {ex}")
+
+
