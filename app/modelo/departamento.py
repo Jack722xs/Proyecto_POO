@@ -1,6 +1,5 @@
 class departamento:
 
-
     def __init__(self, id_depart, proposito_depart, nombre_depart, gerente_asociado):
         self.id_depart = id_depart
         self.proposito_depart = proposito_depart
