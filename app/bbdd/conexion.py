@@ -4,6 +4,7 @@ def getConexion():
     try:
         cone = mysql.connector.connect(
             host="localhost",
+            port=54000,
             user="root",
             password="",
             database="ecotech"

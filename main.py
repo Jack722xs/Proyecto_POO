@@ -42,12 +42,7 @@ while True:
                 continue
 
             if sub_opc == 1:
-               
-                id_depart = input("Ingrese el ID del departamento: ")
-                proposito_depart = input("Ingrese el proposito del departamento: ")
-                nombre_depart = input("Ingrese el nombre del departamento: ")
-                gerente_asociado = input("Ingrese el gerente asociado: ")
-                dep = departamento(id_depart, proposito_depart, nombre_depart, gerente_asociado)
+                addDepartamento()
                 if agregarDepartamento(dep):
                     print("Departamento agregado exitosamente.")
                 else:

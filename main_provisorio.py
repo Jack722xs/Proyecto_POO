@@ -3,6 +3,5 @@ from app.vista.view import *
 
 
 #
-readDepartamento()
-#editDepartamento()
-delDepartamento()
+readEmpleado()
+
