@@ -1,5 +1,7 @@
 from app.vista import view_departamento as vd
 from app.vista import view_empleado as ve
+from app.vista import view_proyecto as vp
+from app.vista import view_usuario as vu
 #le da un alias a cada view para evitar malas practicas de repeticion
 
 while True:
