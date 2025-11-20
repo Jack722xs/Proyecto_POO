@@ -1,10 +1,10 @@
 from app.bbdd.conexion import getConexion
-from app.modelo.usuario import usuario
+from app.modelo.usuario import Usuario
 import mysql.connector
 
 ##=CRUD USUARIO=========================================================================================================##
 
-def agregarUsuario(user: usuario):
+def agregarUsuario(user: Usuario):
     try:
         sql = """INSERT INTO usuario (contraseña, email, nombre_usuario)
                  VALUES (%s, %s, %s)"""
@@ -40,7 +40,7 @@ def verUsuario():
 
 ##_________________________________________________________##
 
-def editarUsuario(user: usuario):
+def editarUsuario(user: Usuario):
     try:
         sql = "UPDATE usuario SET contraseña=%s, email=%s WHERE nombre_usuario=%s"
         cone = getConexion()

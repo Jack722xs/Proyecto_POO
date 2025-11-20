@@ -2,6 +2,8 @@ from app.vista.view_departamento import *
 from app.vista.view_empleado import *
 from app.vista.view_proyecto import *
 from app.vista.view_usuario import *
+from app.vista.view_informe import menu_informes  # ← NUEVA LÍNEA
+
 
 # Nuevas vistas de relaciones
 from app.controlador.sub_controlador.DAO_empleado_departamento import *
@@ -9,24 +11,29 @@ from app.controlador.sub_controlador.DAO_empleado_proyecto import *
 from app.controlador.sub_controlador.DAO_proyecto_departamento import *
 
 
+
 def menu_principal():
     while True:
         print("""
-======================
-      MENU ECOTECH
-======================
-1. Departamentos
-2. Empleados
-3. Proyectos
-4. Usuarios
-5. Salir
+============================================
+            MENU ECOTECH                    
+============================================
+1. Departamentos                           =
+2. Empleados                               =
+3. Proyectos                               =
+4. Usuarios                                =
+5. Generar Informes PDF                    =
+============================================
+6. Salir
 """)
+
 
         try:
             opc = int(input("Seleccione una opcion: "))
         except ValueError:
             print("Error: ingrese un numero.")
             continue
+
 
         if opc == 1:
             menu_departamentos()
@@ -37,10 +44,13 @@ def menu_principal():
         elif opc == 4:
             menu_usuarios()
         elif opc == 5:
+            menu_informes()  
+        elif opc == 6:
             print("Saliendo del sistema...")
             break
         else:
             print("Opcion invalida.")
+
 
 
 # -----------------------------
@@ -62,11 +72,13 @@ def menu_departamentos():
 10. Volver
 """)
 
+
         try:
             opc = int(input("Seleccione una opcion: "))
         except ValueError:
             print("Ingrese un numero.")
             continue
+
 
         if opc == 1:
             addDepartamento()
@@ -99,6 +111,7 @@ def menu_departamentos():
             print("Opcion invalida.")
 
 
+
 # -----------------------------
 #   MENU EMPLEADOS
 # -----------------------------
@@ -116,11 +129,13 @@ def menu_empleados():
 8. Volver
 """)
 
+
         try:
             opc = int(input("Seleccione una opcion: "))
         except ValueError:
             print("Ingrese un numero valido.")
             continue
+
 
         if opc == 1:
             addEmpleado()
@@ -147,6 +162,7 @@ def menu_empleados():
             print("Opción inválida.")
 
 
+
 # -----------------------------
 #   MENU PROYECTOS
 # -----------------------------
@@ -164,11 +180,13 @@ def menu_proyectos():
 8. Volver
 """)
 
+
         try:
             opc = int(input("Seleccione una opción: "))
         except ValueError:
             print("Ingrese un número válido.")
             continue
+
 
         if opc == 1:
             addProyecto()
@@ -195,9 +213,10 @@ def menu_proyectos():
             print("Opción inválida.")
 
 
-# -----------------------------
+
+
 #   MENU USUARIOS
-# -----------------------------
+
 def menu_usuarios():
     while True:
         print("""
@@ -228,6 +247,5 @@ def menu_usuarios():
         else:
             print("Opción inválida.")
 
-
-# Ejecutar menú principal
-
+if __name__ == "__main__":
+    menu_principal()

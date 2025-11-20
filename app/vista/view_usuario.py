@@ -1,4 +1,4 @@
-from app.modelo.usuario import usuario
+from app.modelo.usuario import Usuario
 from app.controlador.DAO_usuario import *
 
 def input_no_vacio(mensaje, max_intentos=5):
@@ -25,7 +25,7 @@ def addUsuario():
         if nombre_usuario is None:
             return
 
-        usu = usuario(
+        usu = Usuario(
             contraseña,
             email,
             nombre_usuario
@@ -53,7 +53,7 @@ def editUsuario():
     if nuevo_email is None:
         return
 
-    usu = usuario(
+    usu = Usuario(
         nueva_contraseña,
         nuevo_email,
         nombre_usuario

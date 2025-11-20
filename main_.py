@@ -2,7 +2,7 @@
 from app.bbdd.conexion import getConexion
 import bcrypt
 import getpass
-from main_provisorio import menu_principal  # Importa tu menú principal
+from app.vista.menu import menu_principal 
 
 def crear_usuario(nombre_usuario, email, pw):
     pw_hash = bcrypt.hashpw(pw.encode(), bcrypt.gensalt())
@@ -33,7 +33,7 @@ def login_terminal():
         password = getpass.getpass("Contraseña: ")
         if autentificacion(usuario, password):
             print("Acceso concedido")
-            menu_principal()  # Aquí te manda al menú principal
+            menu_principal()  
             return
         else:
             intentos -= 1

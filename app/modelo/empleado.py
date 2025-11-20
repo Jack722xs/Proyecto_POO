@@ -1,6 +1,6 @@
-from app.modelo.usuario import usuario
+from app.modelo.usuario import Usuario
 
-class empleado(usuario):
+class empleado(Usuario):
     """
     Un empleado ES un usuario (hereda de usuario)
     además tiene datos laborales propios.
