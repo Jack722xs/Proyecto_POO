@@ -50,7 +50,7 @@ def addProyecto():
         print("No se pudo agregar el proyecto.")
 
 
-def editEmpleado():
+def editProyecto():
     print("EDITAR PROYECTO")
 
     id_proyecto = input_no_vacio("ID proyecto a editar: ")
