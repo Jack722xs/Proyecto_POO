@@ -1,5 +1,8 @@
 from app.modelo.departamento import departamento
 from app.controlador.DAO_departamento import *
+from app.controlador.DAO_departamento import *
+from app.controlador.DAO_usuario import *
+
 
 #Evitar inputs vacios
 def input_no_vacio(mensaje, max_intentos = 5):
@@ -99,3 +102,27 @@ def delDepartamento():
     else:
         print("No se encontro un departamento con ese ID.")
 
+
+
+def asignarGerente_view():
+    print("=== ASIGNAR GERENTE A DEPARTAMENTO ===")
+
+    id_depart = input("ID del departamento: ")
+    id_empleado = input("ID del empleado que sera gerente: ")
+
+    usuario = verUsuarioPorEmpleado(id_empleado)
+
+    if not usuario:
+        print("ERROR: Este empleado no tiene un usuario asociado.")
+        return
+
+    rol = usuario[3]  # Nombre columna 'rol'
+
+    if rol != "gerente":
+        print("ERROR: Este usuario NO tiene el rol de GERENTE.")
+        return
+
+    if asignarGerente(id_depart, id_empleado):
+        print("Gerente asignado correctamente.")
+    else:
+        print("No se pudo asignar el gerente.")

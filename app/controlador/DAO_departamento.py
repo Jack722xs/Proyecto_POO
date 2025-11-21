@@ -79,3 +79,26 @@ def eliminarDepartamento(id_depart: str):
         return False
 ##_________________________________________________________## 
 
+def asignarGerente(id_depart, id_empleado):
+    try:
+        cone = getConexion()
+        cursor = cone.cursor()
+
+        sql = """
+            UPDATE departamento
+            SET gerente_asociado = %s
+            WHERE id_depart = %s
+        """
+
+        cursor.execute(sql, (id_empleado, id_depart))
+        cone.commit()
+
+        cursor.close()
+        cone.close()
+
+        print("Gerente asignado correctamente.")
+        return True
+
+    except mysql.connector.Error as ex:
+        print(f"Error asignando gerente: {ex}")
+        return False

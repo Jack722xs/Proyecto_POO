@@ -2,27 +2,42 @@ from app.bbdd.conexion import getConexion
 import mysql.connector
 
 
-# ==============================
-#   ASIGNAR USUARIO A EMPLEADO
-# ==============================
 def asignarUsuarioAEmpleado(nombre_usuario, id_empleado):
     try:
         cone = getConexion()
         cursor = cone.cursor()
 
-        sql = """
+        # 1. Obtener rol del usuario
+        cursor.execute("SELECT rol FROM usuario WHERE nombre_usuario=%s", (nombre_usuario,))
+        row = cursor.fetchone()
+
+        if not row:
+            print("El usuario no existe.")
+            return False
+
+        rol_usuario = row[0].lower()
+
+        # 2. Asignar usuario al empleado
+        cursor.execute("""
             UPDATE usuario 
             SET id_empleado = %s
             WHERE nombre_usuario = %s
-        """
+        """, (id_empleado, nombre_usuario))
 
-        cursor.execute(sql, (id_empleado, nombre_usuario))
+        # 3. Sincronizar booleano del empleado
+        es_gerente = (rol_usuario == "gerente")
+
+        cursor.execute("""
+            UPDATE empleado
+            SET es_gerente = %s
+            WHERE id_empleado = %s
+        """, (es_gerente, id_empleado))
+
         cone.commit()
-
         cursor.close()
         cone.close()
 
-        print("Usuario asignado al empleado correctamente.")
+        print("Usuario asignado y empleado sincronizado correctamente.")
         return True
 
     except mysql.connector.Error as ex:
@@ -30,32 +45,43 @@ def asignarUsuarioAEmpleado(nombre_usuario, id_empleado):
         return False
 
 
-# ==============================
-#   QUITAR ASOCIACION
-# ==============================
 def quitarUsuarioDeEmpleado(nombre_usuario):
     try:
         cone = getConexion()
         cursor = cone.cursor()
 
-        sql = """
+        # obtener empleado asociado
+        cursor.execute("SELECT id_empleado FROM usuario WHERE nombre_usuario=%s", (nombre_usuario,))
+        row = cursor.fetchone()
+
+        if row and row[0] is not None:
+            id_empleado = row[0]
+
+            # deja de ser gerente si se desvincula
+            cursor.execute("""
+                UPDATE empleado
+                SET es_gerente = False
+                WHERE id_empleado = %s
+            """, (id_empleado,))
+
+        # eliminar la relación
+        cursor.execute("""
             UPDATE usuario 
             SET id_empleado = NULL
             WHERE nombre_usuario = %s
-        """
+        """, (nombre_usuario,))
 
-        cursor.execute(sql, (nombre_usuario,))
         cone.commit()
-
         cursor.close()
         cone.close()
 
-        print("Usuario desvinculado del empleado.")
+        print("Usuario desvinculado del empleado y rol limpiado.")
         return True
 
     except mysql.connector.Error as ex:
         print(f"Error al desvincular: {ex}")
         return False
+
 
 
 # ==============================

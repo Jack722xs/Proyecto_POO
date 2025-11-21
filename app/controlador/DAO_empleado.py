@@ -88,3 +88,17 @@ def verEmpleado():
         return filas
     except mysql.connector.Error as ex:
         print(f"Error: {ex}")
+
+def verEmpleadoPorID(id_empleado):
+    try:
+        sql = "SELECT * FROM empleado WHERE id_empleado=%s"
+        cone = getConexion()
+        cursor = cone.cursor()
+        cursor.execute(sql, (id_empleado,))
+        fila = cursor.fetchone()
+        cursor.close()
+        cone.close()
+        return fila
+    except mysql.connector.Error as ex:
+        print(f"Error: {ex}")
+        return None

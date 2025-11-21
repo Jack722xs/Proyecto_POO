@@ -17,34 +17,25 @@ class empleado(Usuario):
                  es_gerente=False,
                  nombre_usuario=None,
                  contraseña=None):
-        """
-        Nota importante:
-        - Para mantener compatibilidad con tu codigo actual,
-          los primeros 7 parametros son los mismos que antes.
-        - nombre_usuario y contraseña son opcionales.
-        - Si no se pasan, se generan a partir de otros datos.
-        """
-
-        # Si no nos dan nombre de usuario/contraseña, generamos algo razonable
+ 
         if nombre_usuario is None:
-            nombre_usuario = nombre  # por defecto, el nombre
+            nombre_usuario = nombre 
         if contraseña is None:
-            contraseña = ""  # podrias cambiar esto luego
+            contraseña = ""  
 
-        # Inicializamos la parte de usuario (herencia)
+
         super().__init__(contraseña, email, nombre_usuario)
 
-        # Atributos propios de empleado (encapsulados con _)
+
         self._id_empleado = id_empleado
         self._nombre = nombre
         self._apellido = apellido
         self._direccion = direccion
         self._salario = salario
         self._telefono = telefono
-        self._es_gerente = es_gerente  # BOOLEAN
-        self._id_depart = None         # se puede asignar luego a un departamento
+        self._es_gerente = es_gerente 
+        self._id_depart = None         
 
-    # Getters compatibles con tu DAO/vistas actuales
     def get_id_empleado(self):
         return self._id_empleado
 
@@ -58,7 +49,7 @@ class empleado(Usuario):
         return self._direccion
 
     def get_email(self):
-        # usamos el atributo heredado de usuario
+
         return self._email
 
     def get_salario(self):
@@ -79,7 +70,7 @@ class empleado(Usuario):
     def set_id_depart(self, id_depart):
         self._id_depart = id_depart
 
-    # Polimorfismo: sobreescribimos describir() del usuario
+
     def describir(self):
         rol = "Gerente" if self._es_gerente else "Empleado"
         return f"{rol} {self._nombre} {self._apellido} - Email: {self._email}"
