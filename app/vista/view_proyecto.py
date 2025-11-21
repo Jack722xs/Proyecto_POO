@@ -1,5 +1,6 @@
 from app.modelo.proyecto import proyecto
 from app.controlador.DAO_proyecto import *
+import time
 
 
 
@@ -24,8 +25,19 @@ def input_no_vacio(mensaje, max_intentos = 5):
 def addProyecto():
     print("AGREGAR PROYECTO")
 
-    id_proyecto = input_no_vacio("ID proyecto: ")
-    if id_proyecto is None: return
+
+    print("¿Como desea ingresar el ID?")
+    print("1. Generar automaticamente")
+    print("2. Ingresar manualmente")
+    op_id = input("Seleccione (1/2): ").strip()
+
+    if op_id == "1":
+        id_proyecto = f"PROJ-{int(time.time())}"
+        print(f"ID generado: {id_proyecto}")
+    else:
+        id_proyecto = input_no_vacio("ID proyecto: ")
+        if id_proyecto is None: return
+
 
     descripcion = input_no_vacio("Descripcion: ")
     if descripcion is None: return
@@ -33,11 +45,10 @@ def addProyecto():
     estado_proyecto = input_no_vacio("Estado del Proyecto: ")
     if estado_proyecto is None: return
 
-    
+
     fecha_inicio = input_no_vacio("Fecha inicial (YYYY-MM-DD): ")
     if fecha_inicio is None: return
 
-    
     fecha_fin = input_no_vacio("Fecha final (YYYY-MM-DD): ")
     if fecha_fin is None: return
 
@@ -50,7 +61,6 @@ def addProyecto():
         print("Proyecto agregado correctamente.")
     else:
         print("No se pudo agregar el proyecto.")
-
 
 def editProyecto():
     print("EDITAR PROYECTO")

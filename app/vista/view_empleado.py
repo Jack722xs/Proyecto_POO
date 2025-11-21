@@ -1,6 +1,6 @@
 from app.modelo.empleado import empleado
 from app.controlador.DAO_empleado import *
-
+import time
 
 #Evitar inputs vacios
 def input_no_vacio(mensaje, max_intentos = 5):
@@ -20,19 +20,26 @@ def input_no_vacio(mensaje, max_intentos = 5):
     return None
 
 def addEmpleado():
-    # ...
-    try:
-        val_id = input_no_vacio("ID empleado: ")
-        if val_id is None: return
-        id_empleado = int(val_id) # Conversión explícita
-    except ValueError:
-        print("Error: El ID debe ser un número.")
-        return
-    
     print("AGREGAR EMPLEADO")
 
-    id_empleado = input_no_vacio("ID empleado: ")
-    if id_empleado is None: return
+
+    print("¿Como desea ingresar el ID?")
+    print("1. Generar automaticamente")
+    print("2. Ingresar manualmente")
+    op_id = input("Seleccione (1/2): ").strip()
+
+    if op_id == "1":
+
+        id_empleado = int(time.time())
+        print(f"ID generado: {id_empleado}")
+    else:
+        try:
+            val = input_no_vacio("ID empleado: ")
+            if val is None: return
+            id_empleado = int(val)
+        except ValueError:
+            print("Error: El ID debe ser numerico.")
+            return
 
     nombre = input_no_vacio("Nombre: ")
     if nombre is None: return
@@ -49,7 +56,7 @@ def addEmpleado():
     salario = input_no_vacio("Salario: ")
     if salario is None: return
 
-    telefono = input("Telefono (opcional): ").strip() # esta funcion remueve los caracteres del inicio y del final para que no hay espacios extras
+    telefono = input("Telefono (opcional): ").strip()
     if telefono == "":
         telefono = None
 
