@@ -33,11 +33,13 @@ def addProyecto():
     estado_proyecto = input_no_vacio("Estado del Proyecto: ")
     if estado_proyecto is None: return
 
-    fecha_fin = input_no_vacio("Fecha final (YYYY-MM-DD): ")
-    if fecha_fin is None: return
-
+    
     fecha_inicio = input_no_vacio("Fecha inicial (YYYY-MM-DD): ")
     if fecha_inicio is None: return
+
+    
+    fecha_fin = input_no_vacio("Fecha final (YYYY-MM-DD): ")
+    if fecha_fin is None: return
 
     nombre = input_no_vacio("Nombre del proyecto: ")
     if nombre is None: return

@@ -20,6 +20,15 @@ def input_no_vacio(mensaje, max_intentos = 5):
     return None
 
 def addEmpleado():
+    # ...
+    try:
+        val_id = input_no_vacio("ID empleado: ")
+        if val_id is None: return
+        id_empleado = int(val_id) # Conversión explícita
+    except ValueError:
+        print("Error: El ID debe ser un número.")
+        return
+    
     print("AGREGAR EMPLEADO")
 
     id_empleado = input_no_vacio("ID empleado: ")

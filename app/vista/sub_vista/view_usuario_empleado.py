@@ -22,7 +22,7 @@ def readEmpleadoDeUsuario():
         print("No se encontro informacion.")
         return
 
-    print("\n=== Usuario – Empleado ===")
+    print("\n=== Usuario - Empleado ===")
     print(f"Usuario: {datos[0]}")
     if datos[1] is None:
         print("No tiene empleado asociado.")

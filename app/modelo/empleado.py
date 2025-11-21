@@ -23,9 +23,12 @@ class empleado(Usuario):
         if contraseña is None:
             contraseña = ""  
 
+        # Opción más segura en empleado.py:
+        super().__init__(nombre_usuario=nombre_usuario, email=email, password_hash=contraseña)
 
-        super().__init__(contraseña, email, nombre_usuario)
-
+        # === CORRECCIÓN AQUÍ ===
+        self._email = email  # <--- AGREGA ESTA LÍNEA
+        # =======================
 
         self._id_empleado = id_empleado
         self._nombre = nombre
@@ -34,7 +37,7 @@ class empleado(Usuario):
         self._salario = salario
         self._telefono = telefono
         self._es_gerente = es_gerente 
-        self._id_depart = None         
+        self._id_depart = None  
 
     def get_id_empleado(self):
         return self._id_empleado

@@ -7,13 +7,13 @@ def input_no_vacio(mensaje, max_intentos=5):
         if dato:
             return dato
         intentos += 1
-        print(f"Campo vacío. Intento {intentos}/{max_intentos}")
+        print(f"Campo vacio. Intento {intentos}/{max_intentos}")
     print("Demasiados intentos fallidos.")
     return None
 
 
 # ========================================================
-#               EMPLEADO → DEPARTAMENTO
+#               EMPLEADO  DEPARTAMENTO
 # ========================================================
 
 def asignar_empleado_departamento():
@@ -27,11 +27,11 @@ def asignar_empleado_departamento():
 
     try:
         if asignarEmpleadoADepartamento(id_emp, id_dep):
-            print("✔ Empleado asignado correctamente.")
+            print("Empleado asignado correctamente.")
         else:
-            print("✖ No se pudo asignar el empleado.")
+            print("No se pudo asignar el empleado.")
     except Exception as ex:
-        print("⚠ Error al asignar empleado al departamento.")
+        print("Error al asignar empleado al departamento.")
         print(ex)
 
 

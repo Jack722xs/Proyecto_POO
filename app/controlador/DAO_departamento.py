@@ -3,32 +3,31 @@ from app.modelo.departamento import departamento
 import mysql.connector
 
 
-##=CRUD DEPARTAMENTO=========================================================================================================##
+## = CRUD DEPARTAMENTO =================================================================== ##
 
-def agregarDepartamento(departamento:departamento):
+def agregarDepartamento(dep: departamento):
     try:
         sql = """INSERT INTO departamento (id_depart, proposito_depart, nombre_depart, gerente_asociado)
                  VALUES (%s, %s, %s, %s)"""
         cone = getConexion()
         cursor = cone.cursor()
-        cursor.execute(sql,(departamento.get_id_depart(),
-                            departamento.get_proposito_depart(),
-                            departamento.get_nombre_depart(),
-                            departamento.get_gerente_asociado()
+        cursor.execute(sql, (
+            dep.get_id_depart(),
+            dep.get_proposito_depart(),
+            dep.get_nombre_depart(),
+            dep.get_gerente_asociado()  # normalmente None al crear
         ))
         cone.commit()
         cursor.close()
         cone.close()
 
         return True
-    
+
     except mysql.connector.Error as ex:
-        print(f"Error: {ex}")
-    
+        print(f"Error al agregar departamento: {ex}")
         return False
-##_________________________________________________________##
-##_________________________________________________________##  
-    
+
+
 def verDepartamento():
     try:
         sql = "SELECT * FROM departamento"
@@ -40,29 +39,32 @@ def verDepartamento():
         cone.close()
         return filas
     except mysql.connector.Error as ex:
-        print(f"Error: {ex}")
+        print(f"Error al listar departamentos: {ex}")
+        return []
 
-##_________________________________________________________##    
-##_________________________________________________________## 
 
-def editarDepartamento(departamento:departamento):
+def editarDepartamento(dep: departamento):
+    """
+    IMPORTANTE: aqui solo se actualizan proposito y nombre.
+    El gerente se asigna con asignarGerente().
+    """
     try:
-        sql = "UPDATE departamento SET proposito_depart=%s, nombre_depart=%s, gerente_asociado=%s WHERE id_depart=%s"
+        sql = "UPDATE departamento SET proposito_depart=%s, nombre_depart=%s WHERE id_depart=%s"
         cone = getConexion()
         cursor = cone.cursor()
-        cursor.execute(sql, (departamento.get_proposito_depart(),
-                             departamento.get_nombre_depart(),
-                             departamento.get_gerente_asociado(),
-                             departamento.get_id_depart()))
+        cursor.execute(sql, (
+            dep.get_proposito_depart(),
+            dep.get_nombre_depart(),
+            dep.get_id_depart()
+        ))
         cone.commit()
         cursor.close()
         cone.close()
         return True
     except mysql.connector.Error as ex:
-        print(f"Error:{ex}")
+        print(f"Error al editar departamento: {ex}")
+        return False
 
-##_________________________________________________________##
-##_________________________________________________________##  
 
 def eliminarDepartamento(id_depart: str):
     try:
@@ -75,11 +77,16 @@ def eliminarDepartamento(id_depart: str):
         cone.close()
         return True
     except mysql.connector.Error as ex:
-        print(f"Error: {ex}")
+        print(f"Error al eliminar departamento: {ex}")
         return False
-##_________________________________________________________## 
+
+
+## = ASIGNAR GERENTE ===================================================================== ##
 
 def asignarGerente(id_depart, id_empleado):
+    """
+    Guarda el id_empleado como gerente_asociado del departamento.
+    """
     try:
         cone = getConexion()
         cursor = cone.cursor()
@@ -96,7 +103,7 @@ def asignarGerente(id_depart, id_empleado):
         cursor.close()
         cone.close()
 
-        print("Gerente asignado correctamente.")
+        print("Gerente asignado correctamente al departamento.")
         return True
 
     except mysql.connector.Error as ex:

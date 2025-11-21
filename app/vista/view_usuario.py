@@ -1,5 +1,7 @@
 from app.modelo.usuario import Usuario
 from app.controlador.DAO_usuario import *
+import bcrypt
+import getpass  #LIBRERIA PARA OCULTAR CONTRASEÑA
 
 def input_no_vacio(mensaje, max_intentos=5):
     intentos = 0
@@ -12,23 +14,40 @@ def input_no_vacio(mensaje, max_intentos=5):
     print("Demasiados intentos fallidos. Operacion cancelada.")
     return None
 
+#FUNCION PARA PEDIR CONTRASEÑA OCULTA
+def input_password(mensaje):
+    while True:
+        # getpass oculta lo que escribes en la terminal
+        pw = getpass.getpass(mensaje).strip()
+        if pw != "":
+            return pw
+        print("Error: La contraseña no puede estar vacia.")
+
 def addUsuario():
     while True:
         print("AGREGAR USUARIO")
-        contraseña = input_no_vacio("Ingrese la contraseña: ")
-        if contraseña is None:
-            return
-        email = input_no_vacio("Ingrese el email: ")
-        if email is None:
-            return
+
+      
         nombre_usuario = input_no_vacio("Ingrese el nombre de usuario: ")
-        if nombre_usuario is None:
-            return
+        if nombre_usuario is None: return
+
+        
+        contraseña = input_password("Ingrese la contraseña: ")
+        
+        
+        email = input_no_vacio("Ingrese el email: ")
+        if email is None: return
+
+        # --- ENCRIPTACIÓN ---
+        hashed = bcrypt.hashpw(contraseña.encode('utf-8'), bcrypt.gensalt())
+        password_hash = hashed.decode('utf-8') 
+        # --------------------
 
         usu = Usuario(
-            contraseña,
-            email,
-            nombre_usuario
+            nombre_usuario=nombre_usuario,
+            email=email,
+            password_hash=password_hash, 
+            contraseña=contraseña        
         )
 
         if agregarUsuario(usu):
@@ -41,22 +60,27 @@ def addUsuario():
             print("Saliendo del registro de usuarios...")
             break
 
+
 def editUsuario():
     print("EDITAR USUARIO")
     nombre_usuario = input_no_vacio("Ingrese el nombre de usuario a editar: ")
-    if nombre_usuario is None:
-        return
-    nueva_contraseña = input_no_vacio("Ingrese nueva contraseña: ")
-    if nueva_contraseña is None:
-        return
+    if nombre_usuario is None: return
+    
+
+    nueva_contraseña = input_password("Ingrese nueva contraseña: ")
+    
     nuevo_email = input_no_vacio("Ingrese nuevo email: ")
-    if nuevo_email is None:
-        return
+    if nuevo_email is None: return
+
+  
+    hashed = bcrypt.hashpw(nueva_contraseña.encode('utf-8'), bcrypt.gensalt())
+    password_hash = hashed.decode('utf-8') 
 
     usu = Usuario(
-        nueva_contraseña,
-        nuevo_email,
-        nombre_usuario
+        nombre_usuario=nombre_usuario,
+        email=nuevo_email,
+        password_hash=password_hash,
+        contraseña=nueva_contraseña
     )
 
     if editarUsuario(usu):

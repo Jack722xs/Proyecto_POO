@@ -1,21 +1,14 @@
 from app.bbdd.conexion import getConexion
 import app.sesion.sesion as sesion
-from app.vista.view_departamento import *
-from app.vista.view_empleado import *
-from app.vista.view_proyecto import *
-from app.vista.view_usuario import *
 from app.vista.view_informe import menu_informes  
-from app.vista.view_registro_tiempo import * 
-from app.vista.sub_vista.view_usuario_empleado import *
+from app.vista.view_registro_tiempo import addRegistroTiempo
 
-from app.controlador.sub_controlador.DAO_empleado_proyecto import asignarEmpleadoAProyecto
+from app.controlador.sub_controlador.DAO_empleado_proyecto import asignarEmpleadoAProyecto, quitarEmpleadoDeProyecto
 from app.controlador.sub_controlador.DAO_proyecto_departamento import verProyectosDeDepartamento
 from app.controlador.sub_controlador.DAO_empleado_departamento import verEmpleadosDeDepartamento
-from app.controlador.sub_controlador.DAO_empleado_proyecto import quitarEmpleadoDeProyecto
 
 
 def obtener_departamento_del_gerente():
-    """Devuelve el id_depart del departamento donde el gerente_actual es responsable."""
     try:
         cone = getConexion()
         cursor = cone.cursor()
@@ -23,7 +16,7 @@ def obtener_departamento_del_gerente():
             SELECT id_depart 
             FROM departamento
             WHERE gerente_asociado = %s
-        """, (sesion.usuario_actual,))
+        """, (sesion.id_empleado_actual,))   
         result = cursor.fetchone()
         cone.close()
 
@@ -73,6 +66,7 @@ def menu_gerente():
         else:
             print("Opcion invalida.")
 
+
 def ver_mi_departamento():
     id_dep = obtener_departamento_del_gerente()
     if not id_dep:
@@ -82,17 +76,16 @@ def ver_mi_departamento():
     print(f"Tu departamento es: {id_dep}")
 
 
-
 def ver_empleados_mi_departamento():
     id_dep = obtener_departamento_del_gerente()
     if not id_dep:
         print("No administras ningun departamento.")
         return
-    
-    empleados = verEmpleadosDeDepartamento(id_dep)
-    print("Empleados de tu departamento:")
-    print(empleados)
 
+    empleados = verEmpleadosDeDepartamento(id_dep)
+    print("\nEmpleados de tu departamento:")
+    for e in empleados:
+        print(e)
 
 
 def ver_proyectos_mi_departamento():
@@ -102,8 +95,15 @@ def ver_proyectos_mi_departamento():
         return
     
     proyectos = verProyectosDeDepartamento(id_dep)
-    print("Proyectos de tu departamento:")
-    print(proyectos)
+    
+    print("\n=== PROYECTOS DE TU DEPARTAMENTO ===")
+    if not proyectos:
+        print("⚠ No hay proyectos asignados a este departamento.")
+    else:
+        for p in proyectos:
+            # Imprimimos cada proyecto de forma ordenada
+            print(f"- {p}")
+    print("====================================\n")
 
 
 def asignarEmpleadoAProyecto_gerente():
@@ -112,17 +112,18 @@ def asignarEmpleadoAProyecto_gerente():
         print("No administras ningun departamento.")
         return
 
-    print("Empleados de tu departamento:")
-    print(verEmpleadosDeDepartamento(id_dep))
+    print("\nEmpleados de tu departamento:")
+    for e in verEmpleadosDeDepartamento(id_dep):
+        print(e)
 
-    print("Proyectos de tu departamento:")
-    print(verProyectosDeDepartamento(id_dep))
+    print("\nProyectos de tu departamento:")
+    for p in verProyectosDeDepartamento(id_dep):
+        print(p)
 
     id_emp = input("ID del empleado a asignar: ")
     id_proj = input("ID del proyecto: ")
 
     asignarEmpleadoAProyecto(id_emp, id_proj)
-
 
 
 def quitarEmpleadoDeProyecto_gerente():
