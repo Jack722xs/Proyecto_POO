@@ -75,7 +75,7 @@ def autentificacion(nombre_usuario, pw):
 
         hash_pw_str, id_empleado, rol = row
 
-        # Verificar contraseña
+
         # hash_pw_str viene de la BD como string, lo codificamos a bytes para bcrypt
         if bcrypt.checkpw(pw.encode('utf-8'), hash_pw_str.encode('utf-8')):
             # Guardar en sesion global

@@ -1,14 +1,13 @@
 from app.modelo.departamento import departamento
 from app.controlador.DAO_departamento import *
 from app.controlador.DAO_usuario import verUsuarioPorEmpleado
+import time
 
-
-# Evitar inputs vacios
 def input_no_vacio(mensaje, max_intentos=5):
     intentos = 0
 
     while intentos < max_intentos:
-        dato = input(mensaje).strip()  # elimina espacios extra
+        dato = input(mensaje).strip() 
 
         if dato != "":
             return dato
@@ -19,7 +18,6 @@ def input_no_vacio(mensaje, max_intentos=5):
     print("Demasiados intentos fallidos. Operacion cancelada.")
     return None
 
-
 # ================================
 #   AGREGAR DEPARTAMENTO
 # ================================
@@ -27,23 +25,35 @@ def input_no_vacio(mensaje, max_intentos=5):
 def addDepartamento():
     while True:
         print("AGREGAR DEPARTAMENTO")
-        id_depart = input_no_vacio("Ingrese ID: ")
-        if id_depart is None:
-            return
+        
+        print("¿Como desea ingresar el ID?")
+        print("1. Generar automaticamente")
+        print("2. Ingresar manualmente")
+        op_id = input("Seleccione (1/2): ").strip()
+
+        if op_id == "1":
+
+            id_depart = f"DEP-{int(time.time())}"
+            print(f"ID generado: {id_depart}")
+        else:
+            id_depart = input_no_vacio("Ingrese ID: ")
+            if id_depart is None: return
 
         proposito_depart = input_no_vacio("Ingrese proposito: ")
         if proposito_depart is None:
             return
-
         nombre_depart = input_no_vacio("Ingrese nombre: ")
         if nombre_depart is None:
             return
-
+        gerente = input_no_vacio("Ingrese Gerente: ")
+        if gerente is None:
+            return
+        
         dep = departamento(
             id_depart,
             proposito_depart,
             nombre_depart,
-            None  # gerente_asociado
+            gerente
         )
 
         if agregarDepartamento(dep):
@@ -55,7 +65,6 @@ def addDepartamento():
         if opcion != "s":
             print("Saliendo del registro de departamentos...")
             break
-
 
 # ================================
 #   EDITAR DEPARTAMENTO
