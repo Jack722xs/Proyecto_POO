@@ -1,8 +1,8 @@
 class proyecto:
     """
     Proyecto tiene:
-    - Relación con departamento (id_depart)
-    - Relación con empleados (lista de ids de empleados)
+    - Relacion con departamento (id_depart)
+    - Relacion con empleados (lista de ids de empleados)
     """
 
     def __init__(self, id_proyecto, descripcion, estado_proyecto, fecha_fin, fecha_inicio, nombre, id_depart=None):
@@ -15,7 +15,7 @@ class proyecto:
         self._id_depart = id_depart  # departamento que lo contiene (departamento tiene proyectos)
         self._empleados = []         # lista de ids de empleados asignados al proyecto
 
-    # Getters compatibles con tu DAO/vistas
+    # Getters compatibles con el DAO/vistas
     def get_descripcion(self):
         return self._descripcion
 
@@ -40,7 +40,7 @@ class proyecto:
     def set_id_depart(self, id_depart):
         self._id_depart = id_depart
 
-    # Relación PROYECTO TIENE EMPLEADOS
+    # Relacion PROYECTO TIENE EMPLEADOS
     def agregar_empleado(self, id_empleado):
         if id_empleado not in self._empleados:
             self._empleados.append(id_empleado)
@@ -53,6 +53,6 @@ class proyecto:
         return list(self._empleados)
 
     def __str__(self):
-        return (f"id proyecto: {self._id_proyecto} - Nombre: {self._nombre} - Descripción: {self._descripcion} - "
+        return (f"id proyecto: {self._id_proyecto} - Nombre: {self._nombre} - Descripcion: {self._descripcion} - "
                 f"Estado: {self._estado_proyecto} - Fecha inicio: {self._fecha_inicio} - Fecha fin: {self._fecha_fin} "
                 f"- Departamento: {self._id_depart} - Empleados: {self._empleados}")

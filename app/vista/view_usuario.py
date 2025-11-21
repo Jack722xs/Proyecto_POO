@@ -80,4 +80,4 @@ def delUsuario():
     if eliminarUsuario(nombre_usuario):
         print("Usuario eliminado correctamente.")
     else:
-        print("No se encontró un usuario con ese nombre.")
+        print("No se encontro un usuario con ese nombre.")

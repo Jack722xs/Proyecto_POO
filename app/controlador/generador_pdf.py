@@ -55,14 +55,14 @@ class GeneradorInformesPDF:
         return estilo_titulo, estilo_subtitulo
     
     def agregar_titulo(self, titulo):
-        """Agrega título al informe"""
+        """Agrega titulo al informe"""
         estilo_titulo, _ = self._estilos_personalizados()
         self.elementos.append(Paragraph(titulo, estilo_titulo))
         self.elementos.append(Spacer(1, 0.3*inch))
     
     def agregar_fecha_generacion(self, fecha):
-        """Agrega fecha de generación"""
-        parrafo = Paragraph(f"<b>Fecha de generación:</b> {fecha}", self.estilos['Normal'])
+        """Agrega fecha de generacion"""
+        parrafo = Paragraph(f"<b>Fecha de generacion:</b> {fecha}", self.estilos['Normal'])
         self.elementos.append(parrafo)
         self.elementos.append(Spacer(1, 0.2*inch))
     
@@ -103,7 +103,7 @@ class GeneradorInformesPDF:
         _, estilo_subtitulo = self._estilos_personalizados()
         self.elementos.append(Paragraph("Listado de Departamentos", estilo_subtitulo))
         
-        datos = [['ID Depart', 'Nombre', 'Gerente', 'Propósito']]
+        datos = [['ID Depart', 'Nombre', 'Gerente', 'Proposito']]
         
         for dept in departamentos:
             datos.append([
@@ -172,7 +172,7 @@ class GeneradorInformesPDF:
 
 def generador_informe(empleados, departamentos, proyectos, tipo):
     """
-    Función única que genera el informe PDF.
+    Funcion unica que genera el informe PDF.
     
     Args:
         empleados: Lista de empleados (dict) o None
@@ -186,7 +186,7 @@ def generador_informe(empleados, departamentos, proyectos, tipo):
     try:
         generador = GeneradorInformesPDF(f"informe_{tipo}")
         
-        # Título según el tipo
+      
         titulos = {
             "completo": "INFORME COMPLETO DEL SISTEMA - ECOTECH",
             "empleados": "INFORME DE EMPLEADOS - ECOTECH",
@@ -198,7 +198,7 @@ def generador_informe(empleados, departamentos, proyectos, tipo):
         generador.agregar_titulo(titulo)
         generador.agregar_fecha_generacion(datetime.now().strftime("%d/%m/%Y %H:%M:%S"))
         
-        # Agregar tablas según tipo
+       
         if tipo in ["completo", "empleados"] and empleados:
             generador.agregar_tabla_empleados(empleados)
             if tipo == "completo":
@@ -215,9 +215,9 @@ def generador_informe(empleados, departamentos, proyectos, tipo):
         exito, ruta = generador.generar_pdf()
         
         if exito:
-            print(f"✓ Informe PDF generado en: {ruta}")
+            print(f" Informe PDF generado en: {ruta}")
         else:
-            print(f"✗ Error: {ruta}")
+            print(f" Error: {ruta}")
         
         return exito, ruta
     

@@ -2,7 +2,7 @@
 from app.bbdd.conexion import getConexion
 import bcrypt
 import getpass
-from app.vista.menu import menu_principal 
+from app.vista.view_menu import menu_principal 
 
 def crear_usuario(nombre_usuario, email, pw):
     pw_hash = bcrypt.hashpw(pw.encode(), bcrypt.gensalt())

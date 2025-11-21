@@ -3,7 +3,7 @@ from app.modelo.usuario import Usuario
 class empleado(Usuario):
     """
     Un empleado ES un usuario (hereda de usuario)
-    además tiene datos laborales propios.
+    ademas tiene datos laborales propios.
     """
 
     def __init__(self,
@@ -19,8 +19,8 @@ class empleado(Usuario):
                  contraseña=None):
         """
         Nota importante:
-        - Para mantener compatibilidad con tu código actual,
-          los primeros 7 parámetros son los mismos que antes.
+        - Para mantener compatibilidad con tu codigo actual,
+          los primeros 7 parametros son los mismos que antes.
         - nombre_usuario y contraseña son opcionales.
         - Si no se pasan, se generan a partir de otros datos.
         """
@@ -29,7 +29,7 @@ class empleado(Usuario):
         if nombre_usuario is None:
             nombre_usuario = nombre  # por defecto, el nombre
         if contraseña is None:
-            contraseña = ""  # podrías cambiar esto luego
+            contraseña = ""  # podrias cambiar esto luego
 
         # Inicializamos la parte de usuario (herencia)
         super().__init__(contraseña, email, nombre_usuario)
@@ -86,6 +86,6 @@ class empleado(Usuario):
 
     def __str__(self):
         return (f"id empleado: {self._id_empleado} - Nombre: {self._nombre} - Apellido: {self._apellido} - "
-                f"Dirección: {self._direccion} - Email: {self._email} - "
-                f"Salario: {self._salario} - Teléfono: {self._telefono} - "
+                f"Direccion: {self._direccion} - Email: {self._email} - "
+                f"Salario: {self._salario} - Telefono: {self._telefono} - "
                 f"Gerente: {self._es_gerente}")

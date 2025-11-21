@@ -50,7 +50,7 @@ def convertir_a_diccionarios(datos, tipo):
 
 
 def menu_informes():
-    """Menú interactivo - Generador de Informes PDF con datos de BD"""
+    """Menu interactivo - Generador de Informes PDF con datos de BD"""
     while True:
         print("=================================================================")
         print("GENERADOR DE INFORMES - ECOTECH")
@@ -63,7 +63,7 @@ def menu_informes():
         print("5. Volver")
         print("=================================================================")
         
-        opcion = input("Selecciona opción: ").strip()
+        opcion = input("Selecciona opcion: ").strip()
         
         if opcion == "1":
             try:
@@ -121,7 +121,7 @@ def menu_informes():
         elif opcion == "5":
             break
         else:
-            print("Opción inválida")
+            print("Opcion invalida")
 
 
 if __name__ == "__main__":

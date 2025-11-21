@@ -97,5 +97,5 @@ def delDepartamento():
     if eliminarDepartamento(id_depart):
         print("Departamento eliminado correctamente.")
     else:
-        print("No se encontró un departamento con ese ID.")
+        print("No se encontro un departamento con ese ID.")
 

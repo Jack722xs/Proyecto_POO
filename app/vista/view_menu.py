@@ -2,13 +2,16 @@ from app.vista.view_departamento import *
 from app.vista.view_empleado import *
 from app.vista.view_proyecto import *
 from app.vista.view_usuario import *
-from app.vista.view_informe import menu_informes  # ← NUEVA LÍNEA
+from app.vista.view_informe import menu_informes  #  NUEVA LINEA
+from app.vista.view_registro_tiempo import * # NUEVA LINEA
+from app.vista.sub_vista.view_usuario_empleado import *
 
 
 # Nuevas vistas de relaciones
 from app.controlador.sub_controlador.DAO_empleado_departamento import *
 from app.controlador.sub_controlador.DAO_empleado_proyecto import *
 from app.controlador.sub_controlador.DAO_proyecto_departamento import *
+
 
 
 
@@ -23,8 +26,9 @@ def menu_principal():
 3. Proyectos                               =
 4. Usuarios                                =
 5. Generar Informes PDF                    =
+6. Registro Horas Trabajadas               =
 ============================================
-6. Salir
+7. Salir
 """)
 
 
@@ -46,6 +50,8 @@ def menu_principal():
         elif opc == 5:
             menu_informes()  
         elif opc == 6:
+            menu_registro_tiempo()
+        elif opc == 7:
             print("Saliendo del sistema...")
             break
         else:
@@ -159,7 +165,7 @@ def menu_empleados():
         elif opc == 8:
             break
         else:
-            print("Opción inválida.")
+            print("Opcion invalida.")
 
 
 
@@ -169,7 +175,7 @@ def menu_empleados():
 def menu_proyectos():
     while True:
         print("""
------- MENÚ PROYECTOS ------
+------ MENU PROYECTOS ------
 1. Agregar Proyecto
 2. Editar Proyecto
 3. Eliminar Proyecto
@@ -182,9 +188,9 @@ def menu_proyectos():
 
 
         try:
-            opc = int(input("Seleccione una opción: "))
+            opc = int(input("Seleccione una opcion: "))
         except ValueError:
-            print("Ingrese un número válido.")
+            print("Ingrese un numero valido.")
             continue
 
 
@@ -210,7 +216,7 @@ def menu_proyectos():
         elif opc == 8:
             break
         else:
-            print("Opción inválida.")
+            print("Opcion invalida.")
 
 
 
@@ -220,18 +226,22 @@ def menu_proyectos():
 def menu_usuarios():
     while True:
         print("""
------- MENÚ USUARIOS ------
+------ MENU USUARIOS ------
 1. Registrar usuario
 2. Ver usuarios
 3. Editar usuario
 4. Eliminar usuario
-5. Volver
+5. Asignar usuario a empleado
+6. Quitar usuario de empleado
+7. Ver empleado asociado a usuario
+
+8. Volver
 """)
         
         try:
-            opc = int(input("Seleccione una opción: "))
+            opc = int(input("Seleccione una opcion: "))
         except ValueError:
-            print("Ingrese un número válido.")
+            print("Ingrese un numero valido.")
             continue
         
         if opc == 1:
@@ -243,9 +253,46 @@ def menu_usuarios():
         elif opc == 4:
             delUsuario()
         elif opc == 5:
+            addUsuarioAEmpleado()
+        elif opc == 6:
+            delUsuarioDeEmpleado()
+        elif opc == 7:
+            readEmpleadoDeUsuario()
+        elif opc == 8:
             break
         else:
-            print("Opción inválida.")
+            print("Opcion invalida.")
+
+# -----------------------------
+#   MENU REGISTRO TIEMPO
+# -----------------------------
+def menu_registro_tiempo():
+    while True:
+        print("""
+------ MENU REGISTRO DE HORAS ------
+1. Registrar horas trabajadas
+2. Ver registros por empleado
+3. Ver registros por proyecto
+4. Volver
+""")
+        
+        try:
+            opc = int(input("Seleccione una opcion: "))
+        except ValueError:
+            print("Ingrese un numero valido.")
+            continue
+
+        if opc == 1:
+            addRegistroTiempo()
+        elif opc == 2:
+            verRegistrosEmpleado()
+        elif opc == 3:
+            verRegistrosProyecto()
+        elif opc == 4:
+            break
+        else:
+            print("Opcion invalida.")
+
 
 if __name__ == "__main__":
     menu_principal()
