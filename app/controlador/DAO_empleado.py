@@ -82,7 +82,7 @@ def verEmpleado():
         cone = getConexion()
         cursor = cone.cursor()
         cursor.execute(sql)
-        filas = cursor.fetchall() #este codigo es para recuperar todas las filas
+        filas = cursor.fetchall() 
         cursor.close()
         cone.close()
         return filas

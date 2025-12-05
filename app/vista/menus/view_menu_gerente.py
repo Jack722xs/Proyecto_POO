@@ -2,7 +2,7 @@ from app.bbdd.conexion import getConexion
 import app.sesion.sesion as sesion
 from app.vista.view_informe import menu_informes  
 from app.vista.view_registro_tiempo import addRegistroTiempo
-
+from app.utils.helper import *
 from app.controlador.sub_controlador.DAO_empleado_proyecto import asignarEmpleadoAProyecto, quitarEmpleadoDeProyecto
 from app.controlador.sub_controlador.DAO_proyecto_departamento import verProyectosDeDepartamento
 from app.controlador.sub_controlador.DAO_empleado_departamento import verEmpleadosDeDepartamento
@@ -31,6 +31,9 @@ def obtener_departamento_del_gerente():
 
 def menu_gerente():
     while True:
+        
+        saltar_pantalla()
+
         print("""
 ============================================
               MENU GERENTE                  
@@ -98,7 +101,7 @@ def ver_proyectos_mi_departamento():
     
     print("\n=== PROYECTOS DE TU DEPARTAMENTO ===")
     if not proyectos:
-        print("⚠ No hay proyectos asignados a este departamento.")
+        print("No hay proyectos asignados a este departamento.")
     else:
         for p in proyectos:
             # Imprimimos cada proyecto de forma ordenada

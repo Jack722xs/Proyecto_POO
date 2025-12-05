@@ -1,3 +1,4 @@
+from app.utils.helper import *
 from app.controlador.DAO_roles import (
     obtenerRol,
     cambiarRol,
@@ -7,6 +8,9 @@ from app.controlador.DAO_roles import (
 
 def menu_roles():
     while True:
+
+        saltar_pantalla()
+
         print("""
 ======== MENU ROLES ========
 1. Ver rol de un usuario
@@ -19,6 +23,7 @@ def menu_roles():
 
         if opc == "1":
             ver_rol_usuario()
+            input("Presiona enter para continuar")
         elif opc == "2":
             cambiar_rol_usuario()
         elif opc == "3":
@@ -38,6 +43,8 @@ def ver_rol_usuario():
     else:
         print("Usuario no existe.")
 
+    input("Presiona enter para continuar")    
+
 def cambiar_rol_usuario():
     nombre = input("Nombre del usuario: ")
 
@@ -45,3 +52,5 @@ def cambiar_rol_usuario():
     nuevo_rol = input("Nuevo rol: ").lower()
 
     cambiarRol(nombre, nuevo_rol)
+
+    input("/nPresiona enter para continuar")

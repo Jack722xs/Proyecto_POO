@@ -1,14 +1,19 @@
 import sys
 import getpass
 import mysql.connector
+from app.bbdd.init_db import crear_bd, borrar_base_datos
 from app.utils.seguridad import verificar_password
 from app.bbdd.conexion import getConexion
 import app.sesion.sesion as sesion
-
-# Importación de menús por rol
+from app.utils.helper import *
+import sys
+import getpass
+from app.bbdd.init_db import crear_bd
 from app.vista.menus.view_menu_admin import menu_admin
 from app.vista.menus.view_menu_gerente import menu_gerente
 from app.vista.menus.view_menu_empleado import menu_empleado
+
+
 
 
 def autentificacion(nombre_usuario, pw):
@@ -37,6 +42,7 @@ def autentificacion(nombre_usuario, pw):
         return False
 
 def login_terminal():
+    saltar_pantalla()
     print("\n=== LOGIN ECOTECH ===")
     intentos = 3
 
@@ -56,10 +62,13 @@ def login_terminal():
 
                 # Redirección según rol
                 if sesion.rol_actual == "admin":
+                    saltar_pantalla()
                     menu_admin()
                 elif sesion.rol_actual == "gerente":
+                    saltar_pantalla()
                     menu_gerente()
                 elif sesion.rol_actual == "empleado":
+                    saltar_pantalla()
                     menu_empleado()
                 else:
                     print("Rol desconocido o sin permisos asignados.")
@@ -77,32 +86,42 @@ def login_terminal():
 
 
 def main():
-    while True:
-        print("\n" + "="*30)
-        print("      SISTEMA PRINCIPAL")
-        print("="*30)
-        # Menú simplificado: Solo Login y Salir
-        print("1. Iniciar sesion")
-        print("2. Salir")
-        
-        try:
-            op = input("\nSelecciona una opcion: ").strip()
+    print("Verificando sistema de base de datos...")
+    
+    if not crear_bd():
+        print("Error crítico: No se pudo conectar con la base de datos.")
+        sys.exit()
+    try:
+        while True:
+            print("\n" + "="*30)
+            print("SISTEMA PRINCIPAL")
+            print("="*30)
+            print("1. Iniciar sesion")
+            print("2. Salir")
+            
+            try:
+                op = input("\nSelecciona una opcion: ").strip()
 
-            if op == "1":
-                login_terminal()
+                if op == "1":
+                    login_terminal()
 
-            elif op == "2":
-                print("Saliendo del sistema... ¡Hasta luego!")
+                elif op == "2":
+                    print("Cerrando sistema...")
+                    saltar_pantalla()
+                    break 
+
+                else:
+                    print("Opcion no valida, intente de nuevo.")
+            
+            except KeyboardInterrupt:
+                print("\nInterrupción de teclado detectada...")
                 break
+            except Exception as e:
+                print(f"Error en el menu principal: {e}")
 
-            else:
-                print("Opcion no valida, intente de nuevo.")
-        
-        except KeyboardInterrupt:
-            print("\nSaliendo...")
-            sys.exit()
-        except Exception as e:
-            print(f"Error en el menu principal: {e}")
+    finally:
+        borrar_base_datos()
+        print("¡Hasta luego!")
 
 if __name__ == "__main__":
     main()

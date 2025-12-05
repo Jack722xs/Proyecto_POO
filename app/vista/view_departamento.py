@@ -1,6 +1,7 @@
 from app.modelo.departamento import departamento
 from app.controlador.DAO_departamento import *
 from app.controlador.DAO_usuario import verUsuarioPorEmpleado
+from app.utils.helper import *
 
 
 # Evitar inputs vacios
@@ -18,6 +19,7 @@ def input_no_vacio(mensaje, max_intentos=5):
 
     print("Demasiados intentos fallidos. Operacion cancelada.")
     return None
+    
 
 
 # ================================
@@ -43,7 +45,7 @@ def addDepartamento():
             id_depart,
             proposito_depart,
             nombre_depart,
-            None  # gerente_asociado
+            None  # gerente_asociado    
         )
 
         if agregarDepartamento(dep):
@@ -54,8 +56,9 @@ def addDepartamento():
         opcion = input("\n¿Desea agregar otro departamento? (s/n): ").lower()
         if opcion != "s":
             print("Saliendo del registro de departamentos...")
+            saltar_pantalla()
             break
-
+        input("Presiona enter para continuar")
 
 # ================================
 #   EDITAR DEPARTAMENTO
@@ -76,7 +79,6 @@ def editDepartamento():
     if nombre_depart is None:
         return
 
-    
     dep = departamento(
         id_depart,
         proposito_depart,
@@ -88,6 +90,7 @@ def editDepartamento():
         print("Departamento actualizado correctamente.")
     else:
         print("No se pudo actualizar el departamento (ID inexistente).")
+    input("Presiona enter para continuar")    
 
 
 # ================================
@@ -96,15 +99,27 @@ def editDepartamento():
 
 def readDepartamento():
     departamentos = verDepartamento()
+    
     if not departamentos:
-        print("No hay departamentos registrados.")
+        print("\nNo hay departamentos registrados.\n")
         return
+    print("\n" + "="*100)
+    print(f"{'ID':<12} {'Nombre':<20} {'Gerente':<15} {'Propósito'}")
+    print("="*100)
 
-    print("\n=== LISTA DE DEPARTAMENTOS ===")
     for fila in departamentos:
         id_dep, proposito, nombre, gerente = fila
-        print(f"ID: {id_dep} | Nombre: {nombre} | Proposito: {proposito} | Gerente (id_empleado): {gerente}")
-    print("================================\n")
+        id_str = str(id_dep)
+        nombre_str = str(nombre)
+        gerente_str = str(gerente) if gerente else "Sin Asignar"
+        proposito_str = str(proposito)
+
+        print(f"{id_str:<12} {nombre_str:<20} {gerente_str:<15} {proposito_str}")
+    
+    print("="*100 + "\n")
+
+    input("Presiona enter para continuar")
+
 
 
 # ================================
@@ -122,8 +137,9 @@ def delDepartamento():
         print("Departamento eliminado correctamente.")
     else:
         print("No se encontro un departamento con ese ID.")
+    input("Presiona enter para continuar")      
 
-
+      
 # ================================
 #   ASIGNAR GERENTE A DEPARTAMENTO
 # ================================
@@ -156,3 +172,5 @@ def asignarGerente_view():
         print(f"Gerente (empleado {id_empleado}) asignado correctamente al departamento {id_depart}.")
     else:
         print("No se pudo asignar el gerente.")
+    input("Presiona enter para continuar")    
+

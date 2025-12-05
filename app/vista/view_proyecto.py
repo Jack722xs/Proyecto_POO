@@ -1,6 +1,6 @@
 from app.modelo.proyecto import proyecto
 from app.controlador.DAO_proyecto import *
-
+from app.utils.helper import *
 
 
 #Evitar inputs vacios
@@ -50,6 +50,7 @@ def addProyecto():
         print("Proyecto agregado correctamente.")
     else:
         print("No se pudo agregar el proyecto.")
+    input("Presiona enter para continuar")    
 
 
 def editProyecto():
@@ -79,23 +80,43 @@ def editProyecto():
         print("Proyecto actualizado correctamente.")
     else:
         print("No se pudo actualizar (ID inexistente).")
+    input("Presiona enter para continuar")    
 
 
 
 def delProyecto():
     print("ELIMINAR PROYECTO")
 
-    id_proyecto = input_no_vacio("ID empleado a eliminar: ")
+    id_proyecto = input_no_vacio("ID del proyecto a eliminar: ")
     if id_proyecto is None: return
 
     if eliminarProyecto(id_proyecto):
         print("Proyecto eliminado.")
     else:
         print("No existe un Proyecto con ese ID.")
+    input("Presiona enter para continuar")    
 
 
 
 def readProyecto():
+    proyectos = verProyectos()
+
+    if not proyectos:
+        print("\nNo hay proyectos registrados.\n")
+        return
     
-    proyecto = verProyectos()
-    print(proyecto)
+    print("\n" + "="*120)
+    print(f"{'ID':<12} {'Nombre':<20} {'Estado':<15} {'Inicio':<12} {'Fin':<12} {'Descripción'}")
+    print("="*120)
+
+    for proy in proyectos:
+        id_p = str(proy[0])
+        nombre = str(proy[1])
+        desc = str(proy[2])
+        f_ini = str(proy[3])
+        f_fin = str(proy[4])
+        estado = str(proy[5])
+
+        print(f"{id_p:<12} {nombre:<20} {estado:<15} {f_ini:<12} {f_fin:<12} {desc}")
+    print("="*120 + "\n")
+    input("Presiona enter para continuar")

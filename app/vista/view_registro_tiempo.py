@@ -3,7 +3,7 @@ from app.modelo.registro_tiempo import RegistroTiempo
 from app.controlador.DAO_registro_tiempo import agregarRegistro, verRegistrosPorEmpleado, verRegistrosPorProyecto
 from app.controlador.sub_controlador.DAO_empleado_proyecto import verProyectosDeEmpleado
 import app.sesion.sesion as sesion
-
+from app.utils.helper import *
 
 def addRegistroTiempo():
     print("\n=== Registrar Horas Trabajadas ===")
@@ -60,6 +60,8 @@ def addRegistroTiempo():
     else:
         print("ERROR al guardar el registro en la BD.")
 
+    input("Presiona enter para continuar")    
+
 
 def verRegistrosEmpleado():
     id_emp = sesion.id_empleado_actual
@@ -78,6 +80,8 @@ def verRegistrosEmpleado():
     for r in registros:
         print(r)
 
+    input("Presiona enter para continuar")    
+
 
 def verRegistrosProyecto():
     id_proj = input("ID del proyecto: ").strip()
@@ -91,3 +95,5 @@ def verRegistrosProyecto():
     
     for r in registros:
         print(r)
+        
+    input("Presiona enter para continuar")    

@@ -1,3 +1,4 @@
+from app.utils.helper import *
 import sys
 import os
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "../../../..")))
@@ -49,9 +50,10 @@ def convertir_a_diccionarios(datos, tipo):
     return resultado if resultado else None
 
 
+
 def menu_informes():
-    """Menu interactivo - Generador de Informes PDF con datos de BD"""
     while True:
+        saltar_pantalla()
         print("=================================================================")
         print("GENERADOR DE INFORMES - ECOTECH")
         print("=================================================================")
@@ -122,6 +124,7 @@ def menu_informes():
             break
         else:
             print("Opcion invalida")
+        input("Presiona enter para continuar")    
 
 
 if __name__ == "__main__":

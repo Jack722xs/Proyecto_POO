@@ -2,10 +2,14 @@ import app.sesion.sesion as sesion
 from app.vista.view_registro_tiempo import addRegistroTiempo, verRegistrosEmpleado
 from app.controlador.sub_controlador.DAO_empleado_proyecto import verProyectosDeEmpleado
 from app.controlador.DAO_empleado import verEmpleadoPorID
-
+from app.utils.helper import *
 
 def menu_empleado():
     while True:
+
+        saltar_pantalla()
+
+        
         print("""
 ============================================
                MENÚ EMPLEADO

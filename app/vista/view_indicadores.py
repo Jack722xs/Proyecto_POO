@@ -1,7 +1,9 @@
 from app.controlador.DAO_indicadores import obtener_indicador, guardar_consulta_indicador
+from app.utils.helper import *
 
 def menu_indicadores():
     while True:
+        saltar_pantalla()
         print("""
 ============================================
       CONSULTA DE INDICADORES ECONÓMICOS
@@ -54,4 +56,3 @@ def menu_indicadores():
         else:
             print(f"Error: {mensaje}")
         
-        input("\nPresione ENTER para continuar...")

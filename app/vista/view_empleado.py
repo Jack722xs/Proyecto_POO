@@ -1,6 +1,6 @@
 from app.modelo.empleado import empleado
 from app.controlador.DAO_empleado import *
-
+from app.utils.helper import *
 
 #Evitar inputs vacios
 def input_no_vacio(mensaje, max_intentos = 5):
@@ -59,7 +59,9 @@ def addEmpleado():
         print("Empleado agregado correctamente.")
     else:
         print("No se pudo agregar el empleado.")
-
+        
+    input("Presiona enter para continuar")    
+ 
 
 def editEmpleado():
     print("EDITAR EMPLEADO")
@@ -92,7 +94,7 @@ def editEmpleado():
         print("Empleado actualizado correctamente.")
     else:
         print("No se pudo actualizar (ID inexistente).")
-
+    input("Presiona enter para continuar")
 
 def delEmpleado():
     print("ELIMINAR EMPLEADO")
@@ -104,10 +106,31 @@ def delEmpleado():
         print("Empleado eliminado.")
     else:
         print("No existe un empleado con ese ID.")
-
-
+    input("Presiona enter para continuar")    
+    
 
 def readEmpleado():
+    empleados = verEmpleado()
     
-    empleado = verEmpleado()
-    print(empleado)
+    if not empleados:
+        print("\nNo hay empleados registrados.\n")
+        return
+
+    print("\n" + "="*110)
+    print(f"{'ID':<12} {'Nombre':<12} {'Apellido':<12} {'Email':<30} {'Teléfono':<12} {'Salario':<12} {'Dirección'}")
+    print("="*110)
+
+    for emp in empleados:
+        id_emp = str(emp[0])
+        nombre = str(emp[1])
+        apellido = str(emp[2])
+        telefono = str(emp[3])  
+        email = str(emp[4])
+        salario = str(emp[5])
+        direccion = str(emp[6])
+
+        print(f"{id_emp:<12} {nombre:<12} {apellido:<12} {email:<30} {telefono:<12} ${salario:<11} {direccion}")
+    
+    print("="*110 + "\n")
+    input("Presiona enter para continuar")
+

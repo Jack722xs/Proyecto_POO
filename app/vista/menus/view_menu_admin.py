@@ -5,17 +5,16 @@ from app.vista.view_usuario import *
 from app.vista.view_informe import menu_informes  
 from app.vista.view_registro_tiempo import * 
 from app.vista.sub_vista.view_usuario_empleado import *
+from app.utils.helper import *
 
-# Nuevas vistas de relaciones
+
 from app.controlador.sub_controlador.DAO_empleado_departamento import *
 from app.controlador.sub_controlador.DAO_empleado_proyecto import *
 from app.controlador.sub_controlador.DAO_proyecto_departamento import *
 from app.vista.view_indicadores import menu_indicadores
 from app.vista.view_roles import *
-
-# === IMPORTANTE: AGREGAR ESTA LÍNEA PARA QUE FUNCIONE LA OPCIÓN 9 ===
 from app.vista.view_extras import menu_extras 
-# ====================================================================
+
 
 def menu_admin():
     while True:
@@ -31,7 +30,7 @@ def menu_admin():
 6. Registro Horas Trabajadas               =
 7. Roles                                   =
 8. Indicadores Economicos (API)            =
-9. Extras (API 2 y JSON)                   =  <-- NUEVA OPCION
+9. Extras (API 2 y JSON)                   = 
 ============================================
 0. Salir
 """)
@@ -40,6 +39,8 @@ def menu_admin():
             opc = int(input("Seleccione una opcion: "))
         except ValueError:
             print("Error: ingrese un numero.")
+            input("Presiona enter para continuar")
+            saltar_pantalla()
             continue
 
         if opc == 1:
@@ -58,17 +59,17 @@ def menu_admin():
             menu_roles()
         elif opc == 8:
             menu_indicadores()
-        
-        # === AGREGAR ESTE BLOQUE ===
         elif opc == 9:
             menu_extras()
-        # ===========================
 
         elif opc == 0:
             print("Saliendo del sistema...")
+            saltar_pantalla()
             break
         else:
             print("Opcion invalida.")
+            input("Presiona Enter para continuar...")
+            saltar_pantalla()
 
 # -----------------------------
 #   MENU DEPARTAMENTOS
@@ -76,6 +77,7 @@ def menu_admin():
 
 def menu_departamentos():
     while True:
+        saltar_pantalla() 
         print("""
 ------ MENU DEPARTAMENTOS ------
 1. Agregar Departamento
@@ -139,6 +141,7 @@ def menu_departamentos():
 
 def menu_empleados():
     while True:
+        saltar_pantalla()
         print("""
 ------ MENU EMPLEADOS ------
 1. Agregar Empleado
@@ -191,6 +194,11 @@ def menu_empleados():
 
 def menu_proyectos():
     while True:
+        
+
+        saltar_pantalla()
+
+        
         print("""
 ------ MENU PROYECTOS ------
 1. Agregar Proyecto
@@ -241,7 +249,13 @@ def menu_proyectos():
 #   MENU USUARIOS
 
 def menu_usuarios():
+    
     while True:
+        
+
+        saltar_pantalla()
+
+        
         print("""
 ------ MENU USUARIOS ------
 1. Registrar usuario
@@ -286,13 +300,14 @@ def menu_usuarios():
 
 def menu_registro_tiempo():
     while True:
+        saltar_pantalla()
         print("""
------- MENU REGISTRO DE HORAS ------
-1. Registrar horas trabajadas
-2. Ver registros por empleado
-3. Ver registros por proyecto
-4. Volver
-""")
+    ------ MENU REGISTRO DE HORAS ------
+    1. Registrar horas trabajadas
+    2. Ver registros por empleado
+    3. Ver registros por proyecto
+    4. Volver
+    """)
         
         try:
             opc = int(input("Seleccione una opcion: "))
@@ -310,7 +325,7 @@ def menu_registro_tiempo():
             break
         else:
             print("Opcion invalida.")
-
+        input("Presiona Enter para continuar..")
 
 if __name__ == "__main__":
     menu_admin()

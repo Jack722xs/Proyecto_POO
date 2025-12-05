@@ -1,5 +1,6 @@
 from app.modelo.usuario import Usuario
 from app.controlador.DAO_usuario import *
+from app.utils.helper import *
 import getpass
 
 from app.utils.seguridad import encriptar_password 
@@ -25,6 +26,7 @@ def input_password(mensaje):
 
 def addUsuario():
     while True:
+
         print("AGREGAR USUARIO")
 
         nombre_usuario = input_no_vacio("Ingrese el nombre de usuario: ")
@@ -53,6 +55,7 @@ def addUsuario():
         if opcion != "s":
             print("Saliendo del registro de usuarios...")
             break
+        input("Presiona enter para continuar")
 
 
 def editUsuario():
@@ -79,14 +82,33 @@ def editUsuario():
         print("Usuario actualizado correctamente.")
     else:
         print("No se pudo actualizar el usuario (nombre de usuario inexistente)")
+    input("Presiona enter para continuar")    
 
 def readUsuario():
     usuarios = verUsuario()
-    if usuarios:
-        for u in usuarios:
-            print(u)
-    else:
-        print("No hay usuarios registrados.")
+    
+    if not usuarios:
+        print("\nNo hay usuarios registrados.\n")
+        return
+
+    print("\n" + "="*90)
+    print(f"{'Usuario':<20} {'Email':<30} {'Rol':<15} {'ID Empleado'}")
+    print("="*90)
+
+    for u in usuarios:       
+        email = str(u[1])
+        usuario = str(u[2])
+        rol = str(u[4])
+        id_emp = str(u[5]) if u[5] else "N/A"
+
+        print(f"{usuario:<20} {email:<30} {rol:<15} {id_emp}")
+
+    print("="*90 + "\n")
+
+    input("Presiona enter para continuar")
+
+
+
 
 def delUsuario():
     print("ELIMINAR USUARIO")
@@ -97,3 +119,4 @@ def delUsuario():
         print("Usuario eliminado correctamente.")
     else:
         print("No se encontro un usuario con ese nombre.")
+    input("Presiona enter para continuar")    

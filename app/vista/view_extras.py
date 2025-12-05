@@ -2,9 +2,11 @@ from app.utils.api_helper import obtener_socios_externos_api
 from app.utils.serializacion import exportar_datos_a_json
 from app.controlador.DAO_empleado import verEmpleado
 from app.controlador.DAO_proyecto import verProyectos
+from app.utils.helper import *
 
 def menu_extras():
     while True:
+        saltar_pantalla()
         print("""
 ===================================
 ===================================
@@ -23,7 +25,6 @@ def menu_extras():
                     print(f"- {s['name']} | {s['email']} | {s['company']['name']}")
             else:
                 print("No se pudo conectar a la API.")
-            input("Enter para continuar...")
 
         elif opc == "2":
             datos = verEmpleado()
@@ -55,3 +56,4 @@ def menu_extras():
 
         elif opc == "4":
             break
+        input("Presiona enter para continuar")
