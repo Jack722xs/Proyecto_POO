@@ -1,7 +1,9 @@
 from app.modelo.usuario import Usuario
 from app.controlador.DAO_usuario import *
-import bcrypt
-import getpass  #LIBRERIA PARA OCULTAR CONTRASEÑA
+import getpass
+
+from app.utils.seguridad import encriptar_password 
+
 
 def input_no_vacio(mensaje, max_intentos=5):
     intentos = 0
@@ -14,10 +16,8 @@ def input_no_vacio(mensaje, max_intentos=5):
     print("Demasiados intentos fallidos. Operacion cancelada.")
     return None
 
-#FUNCION PARA PEDIR CONTRASEÑA OCULTA
 def input_password(mensaje):
     while True:
-        # getpass oculta lo que escribes en la terminal
         pw = getpass.getpass(mensaje).strip()
         if pw != "":
             return pw
@@ -27,21 +27,15 @@ def addUsuario():
     while True:
         print("AGREGAR USUARIO")
 
-      
         nombre_usuario = input_no_vacio("Ingrese el nombre de usuario: ")
         if nombre_usuario is None: return
 
-        
         contraseña = input_password("Ingrese la contraseña: ")
-        
         
         email = input_no_vacio("Ingrese el email: ")
         if email is None: return
 
-        # --- ENCRIPTACIÓN ---
-        hashed = bcrypt.hashpw(contraseña.encode('utf-8'), bcrypt.gensalt())
-        password_hash = hashed.decode('utf-8') 
-        # --------------------
+        password_hash = encriptar_password(contraseña)
 
         usu = Usuario(
             nombre_usuario=nombre_usuario,
@@ -66,15 +60,13 @@ def editUsuario():
     nombre_usuario = input_no_vacio("Ingrese el nombre de usuario a editar: ")
     if nombre_usuario is None: return
     
-
     nueva_contraseña = input_password("Ingrese nueva contraseña: ")
     
     nuevo_email = input_no_vacio("Ingrese nuevo email: ")
     if nuevo_email is None: return
 
-  
-    hashed = bcrypt.hashpw(nueva_contraseña.encode('utf-8'), bcrypt.gensalt())
-    password_hash = hashed.decode('utf-8') 
+    
+    password_hash = encriptar_password(nueva_contraseña)
 
     usu = Usuario(
         nombre_usuario=nombre_usuario,

@@ -1,7 +1,7 @@
 import sys
-import bcrypt
 import getpass
 import mysql.connector
+from app.utils.seguridad import verificar_password
 from app.bbdd.conexion import getConexion
 import app.sesion.sesion as sesion
 
@@ -12,18 +12,9 @@ from app.vista.menus.view_menu_empleado import menu_empleado
 
 
 def autentificacion(nombre_usuario, pw):
-    """
-    Valida credenciales y almacena datos en sesion.
-    Retorna True si es valido, False en caso contrario.
-    """
     cone = None
-    cursor = None
     try:
         cone = getConexion()
-        if cone is None:
-            print("Error: No hay conexion.")
-            return False
-
         cursor = cone.cursor()
         sql = "SELECT password_hash, id_empleado, rol FROM usuario WHERE nombre_usuario = %s"
         cursor.execute(sql, (nombre_usuario,))
@@ -34,23 +25,16 @@ def autentificacion(nombre_usuario, pw):
 
         hash_pw_str, id_empleado, rol = row
 
-        # Verificar contraseña con bcrypt
-        if bcrypt.checkpw(pw.encode('utf-8'), hash_pw_str.encode('utf-8')):
-            # Guardar en sesion global
+        if verificar_password(pw, hash_pw_str):
             sesion.nombre_usuario = nombre_usuario
             sesion.rol_actual = rol
             sesion.id_empleado_actual = id_empleado
             return True
         
         return False
-
-    except mysql.connector.Error as e:
-        print(f"Error de conexión al autenticar: {e}")
+    except Exception as e:
+        print(e)
         return False
-    finally:
-        if cursor: cursor.close()
-        if cone: cone.close()
-
 
 def login_terminal():
     print("\n=== LOGIN ECOTECH ===")

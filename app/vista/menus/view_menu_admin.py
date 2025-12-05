@@ -6,13 +6,16 @@ from app.vista.view_informe import menu_informes
 from app.vista.view_registro_tiempo import * 
 from app.vista.sub_vista.view_usuario_empleado import *
 
-
 # Nuevas vistas de relaciones
 from app.controlador.sub_controlador.DAO_empleado_departamento import *
 from app.controlador.sub_controlador.DAO_empleado_proyecto import *
 from app.controlador.sub_controlador.DAO_proyecto_departamento import *
 from app.vista.view_indicadores import menu_indicadores
 from app.vista.view_roles import *
+
+# === IMPORTANTE: AGREGAR ESTA LÍNEA PARA QUE FUNCIONE LA OPCIÓN 9 ===
+from app.vista.view_extras import menu_extras 
+# ====================================================================
 
 def menu_admin():
     while True:
@@ -28,17 +31,16 @@ def menu_admin():
 6. Registro Horas Trabajadas               =
 7. Roles                                   =
 8. Indicadores Economicos (API)            =
+9. Extras (API 2 y JSON)                   =  <-- NUEVA OPCION
 ============================================
 0. Salir
 """)
-
 
         try:
             opc = int(input("Seleccione una opcion: "))
         except ValueError:
             print("Error: ingrese un numero.")
             continue
-
 
         if opc == 1:
             menu_departamentos()
@@ -56,13 +58,17 @@ def menu_admin():
             menu_roles()
         elif opc == 8:
             menu_indicadores()
+        
+        # === AGREGAR ESTE BLOQUE ===
+        elif opc == 9:
+            menu_extras()
+        # ===========================
+
         elif opc == 0:
             print("Saliendo del sistema...")
             break
         else:
             print("Opcion invalida.")
-
-
 
 # -----------------------------
 #   MENU DEPARTAMENTOS
