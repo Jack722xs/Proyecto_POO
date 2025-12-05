@@ -20,6 +20,7 @@ def menu_indicadores():
         opc = input("Seleccione indicador: ").strip()
 
         if opc == "7":
+            saltar_pantalla()
             break
         
         if opc not in ["1","2","3","4","5","6"]:

@@ -65,6 +65,7 @@ def menu_gerente():
         elif opc == "7":
             menu_informes()
         elif opc == "8":
+            saltar_pantalla()
             break
         else:
             print("Opcion invalida.")

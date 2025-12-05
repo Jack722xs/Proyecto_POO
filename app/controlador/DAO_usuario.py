@@ -35,10 +35,6 @@ def agregarUsuario(user: Usuario):
         return False
 
 
-
-# ==============================
-#   VER TODOS LOS USUARIOS
-# ==============================
 def verUsuario():
     try:
         sql = "SELECT contraseña, email, nombre_usuario, password_hash, rol, id_empleado FROM usuario"
@@ -57,68 +53,39 @@ def verUsuario():
         print("Error:", ex)
         return []
 
-
-# ==============================
-#   EDITAR USUARIO
-# ==============================
 def editarUsuario(user: Usuario):
     try:
-        sql = """
-            UPDATE usuario
-            SET contraseña=%s,
-                email=%s,
-                password_hash=%s,
-                rol=%s
-            WHERE nombre_usuario=%s
-        """
-
+        sql = """UPDATE usuario SET contraseña=%s, email=%s, password_hash=%s, rol=%s WHERE nombre_usuario=%s"""
         cone = getConexion()
         cursor = cone.cursor()
-
-        cursor.execute(sql, (
-            user.get_contraseña(),
-            user.get_email(),
-            user.get_password_hash(),
-            user.get_rol(),
-            user.get_nombre_usuario()
-        ))
-
+        cursor.execute(sql, (user.get_contraseña(), user.get_email(), user.get_password_hash(), user.get_rol(), user.get_nombre_usuario()))
         cone.commit()
+        
+        filas = cursor.rowcount # CORRECCIÓN
         cursor.close()
         cone.close()
-        return True
-
+        return filas > 0
     except mysql.connector.Error as ex:
         print("Error actualizando usuario:", ex)
         return False
 
-
-
-# ==============================
-#   ELIMINAR USUARIO
-# ==============================
 def eliminarUsuario(nombre_usuario):
     try:
         sql = "DELETE FROM usuario WHERE nombre_usuario=%s"
-
         cone = getConexion()
         cursor = cone.cursor()
         cursor.execute(sql, (nombre_usuario,))
         cone.commit()
-
+        
+        filas = cursor.rowcount # CORRECCIÓN
         cursor.close()
         cone.close()
-        return True
-
+        return filas > 0
     except mysql.connector.Error as ex:
         print("Error eliminando usuario:", ex)
         return False
-
-
-
-# ==============================
-#   BUSCAR USUARIO POR EMPLEADO
-# ==============================
+    
+    
 def verUsuarioPorEmpleado(id_empleado):
     try:
         cone = getConexion()

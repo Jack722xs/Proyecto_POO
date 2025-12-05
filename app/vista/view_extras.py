@@ -55,5 +55,6 @@ def menu_extras():
                 print("No hay proyectos para exportar.")
 
         elif opc == "4":
+            saltar_pantalla()
             break
         input("Presiona enter para continuar")

@@ -129,6 +129,7 @@ def menu_departamentos():
         elif opc == 10:
             asignarGerente_view()
         elif opc == 11:
+            saltar_pantalla()
             break
         else:
             print("Opcion invalida.")
@@ -182,6 +183,7 @@ def menu_empleados():
             id_emp = input("ID empleado: ")
             print(verProyectosDeEmpleado(id_emp))
         elif opc == 8:
+            saltar_pantalla()
             break
         else:
             print("Opcion invalida.")
@@ -239,6 +241,7 @@ def menu_proyectos():
             id_proj = input("ID proyecto: ")
             print(verEmpleadosDeProyecto(id_proj))
         elif opc == 8:
+            saltar_pantalla()
             break
         else:
             print("Opcion invalida.")
@@ -290,6 +293,7 @@ def menu_usuarios():
         elif opc == 7:
             readEmpleadoDeUsuario()
         elif opc == 8:
+            saltar_pantalla()
             break
         else:
             print("Opcion invalida.")
@@ -322,6 +326,7 @@ def menu_registro_tiempo():
         elif opc == 3:
             verRegistrosProyecto()
         elif opc == 4:
+            saltar_pantalla()
             break
         else:
             print("Opcion invalida.")

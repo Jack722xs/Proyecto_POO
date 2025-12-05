@@ -121,6 +121,7 @@ def menu_informes():
                 print(f"Error: {str(ex)}")
             
         elif opcion == "5":
+            saltar_pantalla()
             break
         else:
             print("Opcion invalida")

@@ -30,47 +30,35 @@ def agregarEmpleado(emp:empleado):
         print(f"Error: {ex}")
         return False
     
-    
 def editarEmpleado(emp: empleado):
     try:
         sql = """UPDATE empleado SET nombre=%s, apellido=%s, direccion=%s, email=%s, salario=%s, telefono=%s WHERE id_empleado=%s"""
-
         cone = getConexion()
         cursor = cone.cursor()
-
-        cursor.execute(sql, (emp.get_nombre(),
-                             emp.get_apellido(),
-                             emp.get_direccion(),
-                             emp.get_email(),
-                             emp.get_salario(),
-                             emp.get_telefono(),
-                             emp.get_id_empleado()
-        ))
-
+        cursor.execute(sql, (emp.get_nombre(), emp.get_apellido(), emp.get_direccion(), emp.get_email(), emp.get_salario(), emp.get_telefono(), emp.get_id_empleado()))
         cone.commit()
+        
+        filas = cursor.rowcount # CORRECCIÓN
         cursor.close()
         cone.close()
-
-        return True
+        return filas > 0
 
     except mysql.connector.Error as ex:
         print(f"Error: {ex}")
         return False
 
-
 def eliminarEmpleado(id_empleado: str):
     try:
         sql = "DELETE FROM empleado WHERE id_empleado=%s"
-
         cone = getConexion()
         cursor = cone.cursor()
-
         cursor.execute(sql, (id_empleado,))
         cone.commit()
+        
+        filas = cursor.rowcount # CORRECCIÓN
         cursor.close()
         cone.close()
-
-        return True
+        return filas > 0
 
     except mysql.connector.Error as ex:
         print(f"Error: {ex}")

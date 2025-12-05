@@ -29,6 +29,7 @@ def menu_roles():
         elif opc == "3":
             print("Roles disponibles:", listarRolesValidos())
         elif opc == "4":
+            saltar_pantalla()
             break
         else:
             print("Opcion invalida.")

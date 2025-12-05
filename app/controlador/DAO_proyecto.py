@@ -3,8 +3,6 @@ from app.modelo.proyecto import proyecto
 import mysql.connector
 
 
-##=CRUD DEPARTAMENTO=========================================================================================================##
-
 def agregarProyecto(proy:proyecto):
     try:
         sql = """INSERT INTO proyecto (id_proyecto, nombre, descripcion, fecha_inicio, fecha_fin, estado_proyecto)
@@ -28,8 +26,7 @@ def agregarProyecto(proy:proyecto):
     except mysql.connector.Error as ex:
         print(f"Error: {ex}")
         return False
-##_________________________________________________________##
-##_________________________________________________________##  
+    
     
 def verProyectos():
     try:
@@ -45,12 +42,9 @@ def verProyectos():
         print(f"Error: {ex}")
         return []
 
-##_________________________________________________________## 
-##_________________________________________________________##  
-    
-def verProyecto():
+def verProyectos():
     try:
-        sql = "SELECT * FROM proyecto WHERE id_proyecto=%s"
+        sql = "SELECT * FROM proyecto"
         cone = getConexion()
         cursor = cone.cursor()
         cursor.execute(sql)
@@ -62,8 +56,19 @@ def verProyecto():
         print(f"Error: {ex}")
         return []
 
-##_________________________________________________________##      
-##_________________________________________________________## 
+def verProyecto(id_proyecto): 
+    try:
+        sql = "SELECT * FROM proyecto WHERE id_proyecto=%s"
+        cone = getConexion()
+        cursor = cone.cursor()
+        cursor.execute(sql, (id_proyecto,))
+        datos = cursor.fetchall()
+        cursor.close()
+        cone.close()
+        return datos
+    except mysql.connector.Error as ex:
+        print(f"Error: {ex}")
+        return []
 
 def editarProyecto(proy:proyecto):
     try:
@@ -83,18 +88,16 @@ def editarProyecto(proy:proyecto):
         ))
         
         cone.commit()
+        # VERIFICACIÓN DE FILAS AFECTADAS
+        filas = cursor.rowcount
         cursor.close()
         cone.close()
 
-        return True
+        return filas > 0
 
     except mysql.connector.Error as ex:
         print(f"Error: {ex}")
         return False
-
-
-##_________________________________________________________##
-##_________________________________________________________##  
 
 def eliminarProyecto(id_proyecto: str):
     try:
@@ -103,11 +106,13 @@ def eliminarProyecto(id_proyecto: str):
         cursor = cone.cursor()
         cursor.execute(sql, (id_proyecto,))
         cone.commit()
+        
+        # VERIFICACIÓN DE FILAS AFECTADAS
+        filas = cursor.rowcount
         cursor.close()
         cone.close()
-        return True
+        
+        return filas > 0
     except mysql.connector.Error as ex:
         print(f"Error: {ex}")
         return False
-##_________________________________________________________## 
-
