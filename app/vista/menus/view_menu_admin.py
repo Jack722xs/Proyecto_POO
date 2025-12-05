@@ -11,6 +11,7 @@ from app.vista.sub_vista.view_usuario_empleado import *
 from app.controlador.sub_controlador.DAO_empleado_departamento import *
 from app.controlador.sub_controlador.DAO_empleado_proyecto import *
 from app.controlador.sub_controlador.DAO_proyecto_departamento import *
+from app.vista.view_indicadores import menu_indicadores
 from app.vista.view_roles import *
 
 def menu_admin():
@@ -26,8 +27,9 @@ def menu_admin():
 5. Generar Informes PDF                    =
 6. Registro Horas Trabajadas               =
 7. Roles                                   =
+8. Indicadores Economicos (API)            =
 ============================================
-8. Salir
+0. Salir
 """)
 
 
@@ -53,6 +55,8 @@ def menu_admin():
         elif opc == 7:
             menu_roles()
         elif opc == 8:
+            menu_indicadores()
+        elif opc == 0:
             print("Saliendo del sistema...")
             break
         else:
@@ -304,3 +308,4 @@ def menu_registro_tiempo():
 
 if __name__ == "__main__":
     menu_admin()
+
