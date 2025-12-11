@@ -1,14 +1,71 @@
 import sys
+import time
 import getpass
-import mysql.connector
 from app.bbdd.init_db import crear_bd, borrar_base_datos
 from app.utils.seguridad import verificar_password
 from app.bbdd.conexion import getConexion
 import app.sesion.sesion as sesion
-from app.utils.helper import *
+from app.utils.helper import * 
 from app.vista.menus.view_menu_admin import menu_admin
 from app.vista.menus.view_menu_gerente import menu_gerente
 from app.vista.menus.view_menu_empleado import menu_empleado
+
+class Color:
+    RESET = "\033[0m"
+    BOLD = "\033[1m"
+    RED = "\033[91m"
+    GREEN = "\033[92m"
+    YELLOW = "\033[93m"
+    BLUE = "\033[94m"
+    CYAN = "\033[96m"
+    WHITE = "\033[97m"
+    BG_BLUE = "\033[44m"
+
+def imprimir_logo():
+    print(f"""{Color.CYAN}{Color.BOLD}
+    ███████╗ ██████╗ ██████╗ ████████╗███████╗ ██████╗██╗  ██╗
+    ██╔════╝██╔════╝██╔═══██╗╚══██╔══╝██╔════╝██╔════╝██║  ██║
+    █████╗  ██║     ██║   ██║   ██║   █████╗  ██║     ███████║
+    ██╔══╝  ██║     ██║   ██║   ██║   ██╔══╝  ██║     ██╔══██║
+    ███████╗╚██████╗╚██████╔╝   ██║   ███████╗╚██████╗██║  ██║
+    ╚══════╝ ╚═════╝ ╚═════╝    ╚═╝   ╚══════╝ ╚═════╝╚═╝  ╚═╝
+    {Color.RESET}""")
+
+def barra_carga(iteracion, total, prefijo='', sufijo='', longitud=40, relleno='█'):
+    """Genera una barra de progreso visual en la consola"""
+    porcentaje = ("{0:.1f}").format(100 * (iteracion / float(total)))
+    lleno = int(longitud * iteracion // total)
+    barra = relleno * lleno + '-' * (longitud - lleno)
+    sys.stdout.write(f'\r{Color.GREEN}{prefijo} |{barra}| {porcentaje}% {sufijo}{Color.RESET}')
+    sys.stdout.flush()
+
+def animacion_inicio():
+    saltar_pantalla()
+    imprimir_logo()
+    print(f"\n{Color.BOLD}    INICIANDO SISTEMA CORPORATIVO ECOTECH v2.5{Color.RESET}\n")
+    
+    pasos = [
+        "Cargando módulos del núcleo...",
+        "Verificando integridad de memoria...",
+        "Estableciendo conexión segura...",
+        "Cargando base de datos...",
+        "Iniciando interfaz de usuario..."
+    ]
+    
+    total = len(pasos) * 10
+    progreso = 0
+    
+    for paso in pasos:
+
+        for _ in range(10):
+            time.sleep(0.04)
+            progreso += 1
+            barra_carga(progreso, 50, prefijo="Cargando:", sufijo=paso)
+        print()
+
+    time.sleep(0.5)
+    print(f"\n{Color.GREEN}    >> SISTEMA CARGADO CORRECTAMENTE <<{Color.RESET}")
+    time.sleep(1)
 
 def autentificacion(nombre_usuario, pw):
     cone = None
@@ -32,101 +89,112 @@ def autentificacion(nombre_usuario, pw):
         
         return False
     except Exception as e:
-        print(e)
+        print(f"{Color.RED}Error de sistema: {e}{Color.RESET}")
         return False
 
 def login_terminal():
-    intentos = 5  
+    intentos = 5
     
     while intentos > 0:
-        saltar_pantalla() 
-        print("\n=== LOGIN ECOTECH ===")
+        saltar_pantalla()
+        imprimir_logo()
+        print(f"{Color.BLUE}" + "="*60 + f"{Color.RESET}")
+        print(f"{Color.BOLD}                PORTAL DE ACCESO SEGURO{Color.RESET}")
+        print(f"{Color.BLUE}" + "="*60 + f"{Color.RESET}\n")
         
         try:
-            usuario = input("Nombre de usuario: ").strip()
+            print(f"{Color.YELLOW}Ingrese sus credenciales corporativas.{Color.RESET}")
+            usuario = input(f"{Color.CYAN}➤ Usuario: {Color.RESET}").strip()
             
             if not usuario:
-                intentos -= 1 
-                print("ERROR: El usuario no puede estar vacío.")
-                print(f"Intentos restantes: {intentos}")
-                input("Presione Enter para intentar de nuevo...") # Pausa para leer
-                continue 
+                intentos -= 1
+                print(f"\n{Color.RED}⚠  ERROR: El usuario no puede estar vacío.{Color.RESET}")
+                print(f"{Color.YELLOW}Intentos restantes: {intentos}{Color.RESET}")
+                input("Presione Enter para reintentar...")
+                continue
                 
-            password = getpass.getpass("Contraseña: ")
+            password = getpass.getpass(f"{Color.CYAN}➤ Contraseña: {Color.RESET}")
+
+            print(f"\n{Color.YELLOW}Verificando credenciales...{Color.RESET}")
+            time.sleep(0.8)
 
             if autentificacion(usuario, password):
-                print("\nAcceso concedido.")
-                print(f"Bienvenido {sesion.nombre_usuario} | Rol: {sesion.rol_actual.upper()}")
-                print("-" * 30)
+                print(f"\n{Color.GREEN}✔ ACCESO CONCEDIDO.{Color.RESET}")
+                print(f"Bienvenido, {Color.BOLD}{sesion.nombre_usuario}{Color.RESET}.")
+                print(f"Perfil cargado: {Color.BG_BLUE} {sesion.rol_actual.upper()} {Color.RESET}")
+                time.sleep(1.5)
 
                 if sesion.rol_actual == "admin":
-                    saltar_pantalla()
                     menu_admin()
                 elif sesion.rol_actual == "gerente":
-                    saltar_pantalla()
                     menu_gerente()
                 elif sesion.rol_actual == "empleado":
-                    saltar_pantalla()
                     menu_empleado()
                 else:
-                    print("Rol desconocido o sin permisos asignados.")
-                    input("Presione Enter para continuar...")
+                    print(f"{Color.RED}Error: Rol desconocido o sin permisos.{Color.RESET}")
+                    input("Presione Enter...")
                 return 
 
             else:
                 intentos -= 1
-                print(f"Credenciales incorrectas. Intentos restantes: {intentos}")
-                input("Presione Enter para intentar de nuevo...") # Pausa para leer antes de limpiar
+                print(f"\n{Color.RED}✖ Credenciales incorrectas.{Color.RESET}")
+                print(f"{Color.YELLOW}Intentos restantes: {intentos}{Color.RESET}")
+                input("Presione Enter para intentar de nuevo...")
 
         except KeyboardInterrupt:
-            print("\n\nOperacion cancelada por el usuario.")
+            print(f"\n\n{Color.YELLOW}Operación cancelada por el usuario.{Color.RESET}")
             return
 
-    # Si sale del while, se acabaron los intentos
-    print("Demasiados intentos fallidos. Acceso bloqueado temporalmente.")
+    print(f"\n{Color.BG_BLUE}{Color.RED} DEMASIADOS INTENTOS FALLIDOS. ACCESO BLOQUEADO. {Color.RESET}")
     input("Presione Enter para volver al menú principal...")
 
 def main():
-    print("Verificando sistema de base de datos...")
+
+    animacion_inicio()
     
+    print("Verificando conexión con base de datos...")
     if not crear_bd():
-        print("Error crítico: No se pudo conectar con la base de datos.")
+        print(f"{Color.RED}Error crítico: No se pudo conectar con la base de datos.{Color.RESET}")
         sys.exit()
+        
     try:
         while True:
-
-            saltar_pantalla() 
+            saltar_pantalla()
+            imprimir_logo()
             
-            print("\n" + "="*30)
-            print("SISTEMA PRINCIPAL")
-            print("="*30)
-            print("1. Iniciar sesion")
-            print("2. Salir")
+            print(f"{Color.BLUE}╔{'═'*42}╗{Color.RESET}")
+            print(f"{Color.BLUE}║{Color.RESET} {Color.BOLD}{Color.WHITE}      SISTEMA PRINCIPAL ECOTECH          {Color.RESET}{Color.BLUE}║{Color.RESET}")
+            print(f"{Color.BLUE}╠{'═'*42}╣{Color.RESET}")
+            print(f"{Color.BLUE}║{Color.RESET}  1. Iniciar Sesión                       {Color.BLUE}║{Color.RESET}")
+            print(f"{Color.BLUE}║{Color.RESET}  2. Apagar Sistema                       {Color.BLUE}║{Color.RESET}")
+            print(f"{Color.BLUE}╚{'═'*42}╝{Color.RESET}")
             
             try:
-                op = input("\nSelecciona una opcion: ").strip()
+                op = input(f"\n{Color.GREEN}Selecciona una opción > {Color.RESET}").strip()
 
                 if op == "1":
                     login_terminal()
 
                 elif op == "2":
-                    print("Cerrando sistema...")
+                    print(f"\n{Color.YELLOW}Cerrando sistema y conexiones...{Color.RESET}")
+                    time.sleep(1)
                     break 
 
                 else:
-                    print("Opcion no valida, intente de nuevo.")
-                    input("Presione Enter para continuar...") 
+                    print(f"\n{Color.RED}Opción no válida.{Color.RESET}")
+                    input("Presione Enter...")
             
             except KeyboardInterrupt:
-                print("\nInterrupción de teclado detectada...")
+                print(f"\n{Color.YELLOW}Interrupción detectada...{Color.RESET}")
                 break
             except Exception as e:
-                print(f"Error en el menu principal: {e}")
-                input("Presione Enter para continuar...")
+                print(f"{Color.RED}Error en el menú principal: {e}{Color.RESET}")
+                input("Presione Enter...")
 
     finally:
         borrar_base_datos()
-        print("¡Hasta luego!")
+        print(f"\n{Color.CYAN}¡Gracias por usar EcoTech Solutions!{Color.RESET}")
+        time.sleep(1)
 
 if __name__ == "__main__":
     main()
