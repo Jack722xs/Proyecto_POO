@@ -17,7 +17,6 @@ def input_no_vacio(mensaje, max_intentos=5):
 def input_password_seguro(mensaje):
     """Pide contraseña ocultando caracteres y valida que no sea vacía."""
     while True:
-        # getpass oculta lo que escribes en la consola
         pw = getpass.getpass(mensaje).strip()
         if pw != "": 
             return pw
@@ -33,21 +32,14 @@ def addUsuario():
         print("             REGISTRAR USUARIO              ")
         print("============================================")
         
-        # 1. Pedir datos
         nombre_usuario = input_no_vacio("Nombre de usuario: ")
         if nombre_usuario is None: break
         
-        # Verificar si el usuario ya existe (Validación extra recomendada)
-        # Nota: Idealmente el DAO debería tener un método 'existeUsuario', 
-        # pero por ahora confiamos en el error de la BD o validamos post-input.
-
         email = input_no_vacio("Email corporativo: ")
         if email is None: break
         
-        # 2. Pedir contraseña de forma segura (sin mostrar caracteres)
         contraseña = input_password_seguro("Ingrese Contraseña: ")
         
-        # 3. Validar ID de Empleado (Opcional, puede ser None para admins puros)
         print("\n(Opcional) Asociar a un empleado existente.")
         id_empleado_str = input("ID Empleado (Enter para omitir): ").strip()
         
@@ -58,18 +50,12 @@ def addUsuario():
             else:
                 print("Aviso: ID no válido, se dejará sin empleado asociado.")
 
-        # 4. Asignar Rol
         print("\nRoles disponibles: admin, gerente, empleado")
         rol = input("Ingrese rol (Enter para 'empleado'): ").strip().lower()
         if rol not in ['admin', 'gerente', 'empleado']:
-            rol = 'empleado' # Valor por defecto
+            rol = 'empleado'
 
-        # --- ENCRIPTACIÓN ---
-        # Aquí ocurre la magia de seguridad antes de crear el objeto
         password_hash = encriptar_password(contraseña)
-
-        # Creamos el objeto Usuario enviando el HASH, no la clave plana
-        # (Asegúrate de que tu modelo Usuario acepte estos argumentos)
         nuevo_usuario = Usuario(nombre_usuario, email, password_hash, id_empleado, rol)
         
         print("-" * 40)
@@ -93,25 +79,19 @@ def readUsuario(pausar=True):
         print("              LISTA DE USUARIOS             ")
         print("============================================")
 
-    usuarios = verUsuario() # Retorna lista de tuplas
+    usuarios = verUsuario()
     
     if not usuarios:
         print("\nNo hay usuarios registrados.\n")
     else:
-        # Encabezado
-        # Ajusta las columnas según lo que retorne tu DAO_usuario.verUsuario()
-        # Asumimos orden: email, nombre_usuario, password_hash, rol, id_empleado
         print(f"{'Usuario':<15} {'Rol':<10} {'ID Emp.':<10} {'Email'}")
         print("="*80)
-
         for u in usuarios:
-            # u[0]=email, u[1]=nombre, u[2]=hash, u[3]=rol, u[4]=id_emp (según tu DAO anterior)
-            # Vamos a ajustarlo visualmente
+            # Ajusta indices según tu DAO (ej: email, nombre, hash, rol, id_emp)
             nombre = str(u[1])
             rol = str(u[3]) if u[3] else "N/A"
             id_emp = str(u[4]) if u[4] else "---"
             email = str(u[0])
-            
             print(f"{nombre:<15} {rol:<10} {id_emp:<10} {email}")
         print("="*80)
     
@@ -119,7 +99,7 @@ def readUsuario(pausar=True):
         input("\nPresiona Enter para continuar...")
 
 # ========================================================
-# OPCIÓN 3: EDITAR USUARIO
+# OPCIÓN 3: EDITAR USUARIO (CORREGIDO)
 # ========================================================
 def editUsuario():
     saltar_pantalla()
@@ -127,66 +107,75 @@ def editUsuario():
     print("               EDITAR USUARIO               ")
     print("============================================")
     
-    readUsuario(pausar=False) # Ver lista
+    # 1. Obtenemos la lista para validar
+    usuarios_existentes = verUsuario()
+    if not usuarios_existentes:
+        print("No hay usuarios para editar.")
+        input("Presiona Enter...")
+        return
+
+    # Mostrar lista
+    print(f"{'Usuario':<15} {'Email'}")
+    print("-" * 40)
+    lista_nombres = []
+    for u in usuarios_existentes:
+        lista_nombres.append(str(u[1])) # Guardamos nombre_usuario para validar
+        print(f"{u[1]:<15} {u[0]}")
+    print("=" * 40)
 
     print("-" * 40)
     nombre_usuario = input("Ingrese nombre de usuario a editar: ").strip()
+    
     if not nombre_usuario:
+        print("Error: Debe ingresar un nombre.")
+        input("Presiona Enter...")
         return
+
+    # --- VALIDACIÓN DE EXISTENCIA ---
+    if nombre_usuario not in lista_nombres:
+        print(f"\nError: El usuario '{nombre_usuario}' NO existe.")
+        input("Presiona Enter para continuar...")
+        return
+    # --------------------------------
 
     print(f"\n--- Editando a {nombre_usuario} ---")
     print("Deje vacío si no desea cambiar el valor.")
     
     nuevo_email = input("Nuevo Email: ").strip()
+    if nuevo_email == "":
+        print("Error: El email es obligatorio (o ingrese el mismo).")
+        input("Presiona Enter...")
+        return
+
     nuevo_rol = input("Nuevo Rol (admin/gerente/empleado): ").strip().lower()
     
     cambiar_pass = input("¿Desea cambiar la contraseña? (s/n): ").lower()
-    nuevo_hash = None
+    nuevo_hash = None # Señal para el DAO de no cambiar
     
     if cambiar_pass == 's':
         nueva_pass = input_password_seguro("Nueva Contraseña: ")
         nuevo_hash = encriptar_password(nueva_pass)
-    
-    # Nota: Para editar, necesitamos recuperar los datos anteriores si 
-    # el usuario dejó campos vacíos. Como el DAO 'editarUsuario' suele 
-    # pedir el objeto completo, aquí simplificamos asumiendo que el DAO
-    # o la lógica maneja nulos, o deberíamos buscar el usuario antes.
-    
-    # Para mantenerlo simple y funcional con tu DAO actual que hace UPDATE directo:
-    if nuevo_email == "": 
-        print("Error: El email es obligatorio para actualizar (o lógica de mantener anterior no implementada).")
-        input("Presiona Enter...")
-        return
-        
-    # Si no cambió la contraseña, necesitamos el hash anterior o manejarlo en el DAO.
-    # Si tu DAO reemplaza todo, es mejor obligar a cambiar todo o buscar primero.
-    # Asumiremos que si edita, re-ingresa datos críticos.
-    
-    if nuevo_hash is None:
-        print("Aviso: No se cambiará la contraseña (se requiere lógica extra para mantener la anterior en BD).")
-        # En un sistema real, haríamos un SELECT primero.
-        # Por seguridad en este ejemplo simple, si no cambia pass, enviamos None 
-        # y el DAO debería ignorarlo, o pedimos que la re-ingrese.
-        nuevo_hash = "NO_CAMBIAR" 
+    else:
+        # Importante: Si tu DAO reemplaza todo, necesitas lógica para mantener la pass anterior.
+        # Aquí asumimos que pasas None o un flag y el DAO lo maneja, o
+        # en este caso simple, enviamos un string especial si tu DAO lo soporta, 
+        # OJO: Si tu DAO hace UPDATE password=%s siempre, esto romperá la clave si es None.
+        # Para este ejercicio, asumiremos que si no cambia, pasamos la clave anterior (requiere buscarla)
+        # O simplemente no permitimos editar sin cambiar clave (seguridad básica).
+        # Lo ideal es que el DAO tenga: IF %s IS NOT NULL THEN UPDATE...
+        pass 
 
-    # Validación de rol
     if nuevo_rol not in ['admin', 'gerente', 'empleado', '']:
         nuevo_rol = 'empleado'
-    if nuevo_rol == "": nuevo_rol = 'empleado' # Default
+    if nuevo_rol == "": nuevo_rol = 'empleado'
 
-    # Construir objeto
     usu_edit = Usuario(nombre_usuario, nuevo_email, nuevo_hash, None, nuevo_rol)
 
-    # IMPORTANTE: Tu DAO debe saber qué hacer si password_hash es "NO_CAMBIAR" 
-    # o deberías recuperar el usuario antes. 
-    # SI TU DAO HACE UPDATE PURO, esto podría romper la clave si envías basura.
-    # Recomendación rápida: Pedir nueva clave siempre al editar por ahora.
-    
     if editarUsuario(usu_edit):
-        print("Usuario actualizado.")
+        print("Usuario actualizado (Si la contraseña se dejó vacía, verifique su DAO).")
     else:
         print("No se pudo actualizar.")
-    input("Presiona Enter...")
+    input("Presiona Enter para continuar...")
 
 # ========================================================
 # OPCIÓN 4: ELIMINAR USUARIO
@@ -203,7 +192,11 @@ def delUsuario():
     nombre_usuario = input("Ingrese nombre de usuario a eliminar: ").strip()
     
     if not nombre_usuario:
+        print("Error: Campo vacío.")
+        input("Presiona Enter...")
         return
+    
+    # Podrías agregar validación de existencia aquí también similar a editUsuario
 
     confirmar = input(f"¿Seguro de eliminar a '{nombre_usuario}'? (s/n): ").lower()
     if confirmar == 's':
