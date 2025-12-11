@@ -10,13 +10,10 @@ class departamento:
         self._id_depart = id_depart
         self._proposito_depart = proposito_depart
         self._nombre_depart = nombre_depart
-        self._gerente_asociado = gerente_asociado  # aqui guardamos id_empleado o None
+        self._gerente_asociado = gerente_asociado  
+        self._empleados = []  
+        self._proyectos = [] 
 
-        # Relaciones en memoria (no se guardan en la BD)
-        self._empleados = []  # lista de ids de empleados
-        self._proyectos = []  # lista de ids de proyectos
-
-    # Getters compatibles con tu DAO/vistas
     def get_id_depart(self):
         return self._id_depart
 
@@ -29,7 +26,6 @@ class departamento:
     def get_gerente_asociado(self):
         return self._gerente_asociado
 
-    # Relación DEPARTAMENTO TIENE EMPLEADOS
     def agregar_empleado(self, id_empleado):
         if id_empleado not in self._empleados:
             self._empleados.append(id_empleado)
@@ -41,7 +37,6 @@ class departamento:
     def get_empleados(self):
         return list(self._empleados)
 
-    # Relación DEPARTAMENTO TIENE PROYECTOS
     def agregar_proyecto(self, id_proyecto):
         if id_proyecto not in self._proyectos:
             self._proyectos.append(id_proyecto)

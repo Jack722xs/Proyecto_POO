@@ -12,10 +12,10 @@ class proyecto:
         self._fecha_fin = fecha_fin
         self._fecha_inicio = fecha_inicio
         self._nombre = nombre
-        self._id_depart = id_depart  # departamento que lo contiene (departamento tiene proyectos)
-        self._empleados = []         # lista de ids de empleados asignados al proyecto
+        self._id_depart = id_depart
+        self._empleados = []    
 
-    # Getters compatibles con el DAO/vistas
+
     def get_descripcion(self):
         return self._descripcion
 
@@ -40,7 +40,6 @@ class proyecto:
     def set_id_depart(self, id_depart):
         self._id_depart = id_depart
 
-    # Relacion PROYECTO TIENE EMPLEADOS
     def agregar_empleado(self, id_empleado):
         if id_empleado not in self._empleados:
             self._empleados.append(id_empleado)

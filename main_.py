@@ -49,7 +49,7 @@ def login_terminal():
                 intentos -= 1 
                 print("ERROR: El usuario no puede estar vacío.")
                 print(f"Intentos restantes: {intentos}")
-                input("Presione Enter para intentar de nuevo...") 
+                input("Presione Enter para intentar de nuevo...") # Pausa para leer
                 continue 
                 
             password = getpass.getpass("Contraseña: ")
@@ -76,12 +76,13 @@ def login_terminal():
             else:
                 intentos -= 1
                 print(f"Credenciales incorrectas. Intentos restantes: {intentos}")
-                input("Presione Enter para intentar de nuevo...") 
+                input("Presione Enter para intentar de nuevo...") # Pausa para leer antes de limpiar
 
         except KeyboardInterrupt:
             print("\n\nOperacion cancelada por el usuario.")
             return
 
+    # Si sale del while, se acabaron los intentos
     print("Demasiados intentos fallidos. Acceso bloqueado temporalmente.")
     input("Presione Enter para volver al menú principal...")
 

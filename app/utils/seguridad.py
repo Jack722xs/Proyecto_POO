@@ -1,18 +1,30 @@
 import bcrypt
 
-def encriptar_password(password_texto_plano):
-    if not password_texto_plano:
+def encriptar_password(password):
+    """Encripta una contraseña en texto plano y devuelve el hash en string."""
+    if not password:
         return None
-    hashed = bcrypt.hashpw(password_texto_plano.encode('utf-8'), bcrypt.gensalt())
-    return hashed.decode('utf-8')
+    # Convertimos a bytes, hasheamos y devolvemos como string para guardar en BD
+    return bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt()).decode('utf-8')
 
-def verificar_password(password_ingresada, hash_guardado):
-    if not password_ingresada or not hash_guardado:
-        return False
+def verificar_password(password_plano, password_hash):
+    """Verifica si la contraseña coincide con el hash guardado."""
     try:
-        return bcrypt.checkpw(
-            password_ingresada.encode('utf-8'), 
-            hash_guardado.encode('utf-8')
-        )
-    except Exception:
+        # 1. Asegurar que la contraseña plana sea bytes
+        if isinstance(password_plano, str):
+            password_bytes = password_plano.encode('utf-8')
+        else:
+            password_bytes = password_plano
+
+        # 2. Asegurar que el hash sea bytes
+        if isinstance(password_hash, str):
+            hash_bytes = password_hash.encode('utf-8')
+        else:
+            hash_bytes = password_hash
+
+        # 3. Verificar con bcrypt
+        return bcrypt.checkpw(password_bytes, hash_bytes)
+    
+    except Exception as e:
+        print(f"Error verificando password: {e}")
         return False

@@ -6,7 +6,7 @@ class Usuario:
         self.password_hash = password_hash
         self.rol = rol
         self.id_empleado = id_empleado
-        self.contraseña = contraseña  # Solo para uso temporal (validacion)
+        self.contraseña = contraseña 
 
 
     def get_nombre_usuario(self):
