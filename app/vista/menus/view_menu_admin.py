@@ -7,7 +7,7 @@ from app.vista.view_registro_tiempo import *
 from app.vista.sub_vista.view_usuario_empleado import *
 from app.utils.helper import *
 
-# Importaciones específicas para validaciones
+
 from app.controlador.DAO_empleado import verEmpleadoPorID
 from app.controlador.DAO_proyecto import verProyecto
 
