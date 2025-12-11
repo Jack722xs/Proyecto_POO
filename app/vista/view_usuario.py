@@ -5,14 +5,12 @@ import getpass
 from app.utils.seguridad import encriptar_password 
 
 def input_no_vacio(mensaje, max_intentos=5):
-    # (Mantener igual)
     intentos = 0
     while intentos < max_intentos:
         dato = input(mensaje).strip()
         if dato != "": return dato
         intentos += 1
         print(f"Este campo no puede estar vacio. Intento {intentos}/{max_intentos}")
-    print("Demasiados intentos fallidos. Operacion cancelada.")
     return None
 
 def input_password(mensaje):
@@ -22,7 +20,6 @@ def input_password(mensaje):
         print("Error: La contraseña no puede estar vacia.")
 
 def addUsuario():
-    # (Mantener igual)
     while True:
         print("AGREGAR USUARIO")
         nombre_usuario = input_no_vacio("Ingrese el nombre de usuario: ")
@@ -30,9 +27,11 @@ def addUsuario():
         contraseña = input_password("Ingrese la contraseña: ")
         email = input_no_vacio("Ingrese el email: ")
         if email is None: return
+        
         password_hash = encriptar_password(contraseña)
 
-        usu = Usuario(nombre_usuario=nombre_usuario, email=email, password_hash=password_hash, contraseña=contraseña)
+        usu = Usuario(nombre_usuario=nombre_usuario, email=email, password_hash=password_hash, contraseña=None)
+        
         if agregarUsuario(usu):
             print("Usuario agregado correctamente.")
         else:
@@ -40,13 +39,12 @@ def addUsuario():
 
         opcion = input("\n¿Desea agregar otro usuario? (s/n): ").lower()
         if opcion != "s":
-            print("Saliendo del registro de usuarios...")
+            print("Saliendo...")
             break
         input("Presiona enter para continuar")
 
 def editUsuario():
     print("EDITAR USUARIO")
-    # MOSTRAR LISTA
     readUsuario(pausar=False)
 
     nombre_usuario = input_no_vacio("Ingrese el nombre de usuario a editar: ")
@@ -56,15 +54,15 @@ def editUsuario():
     if nuevo_email is None: return
     
     password_hash = encriptar_password(nueva_contraseña)
-    usu = Usuario(nombre_usuario=nombre_usuario, email=nuevo_email, password_hash=password_hash, contraseña=nueva_contraseña)
+    usu = Usuario(nombre_usuario=nombre_usuario, email=nuevo_email, password_hash=password_hash)
 
     if editarUsuario(usu):
         print("Usuario actualizado correctamente.")
     else:
-        print("No se pudo actualizar el usuario (nombre de usuario inexistente)")
+        print("No se pudo actualizar el usuario.")
     input("Presiona enter para continuar")    
 
-def readUsuario(pausar=True): # PARAMETRO NUEVO
+def readUsuario(pausar=True):
     usuarios = verUsuario()
     if not usuarios:
         print("\nNo hay usuarios registrados.\n")
@@ -76,10 +74,10 @@ def readUsuario(pausar=True): # PARAMETRO NUEVO
     print("="*90)
 
     for u in usuarios:       
-        email = str(u[1])
-        usuario = str(u[2])
-        rol = str(u[4])
-        id_emp = str(u[5]) if u[5] else "N/A"
+        email = str(u[0])
+        usuario = str(u[1])
+        rol = str(u[3])
+        id_emp = str(u[4]) if u[4] else "N/A"
         print(f"{usuario:<20} {email:<30} {rol:<15} {id_emp}")
 
     print("="*90 + "\n")
@@ -88,9 +86,7 @@ def readUsuario(pausar=True): # PARAMETRO NUEVO
 
 def delUsuario():
     print("ELIMINAR USUARIO")
-    # MOSTRAR LISTA
     readUsuario(pausar=False)
-
     nombre_usuario = input_no_vacio("Ingrese el nombre de usuario a eliminar: ")
     if nombre_usuario is None: return
     

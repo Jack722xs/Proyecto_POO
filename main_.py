@@ -6,15 +6,9 @@ from app.utils.seguridad import verificar_password
 from app.bbdd.conexion import getConexion
 import app.sesion.sesion as sesion
 from app.utils.helper import *
-import sys
-import getpass
-from app.bbdd.init_db import crear_bd
 from app.vista.menus.view_menu_admin import menu_admin
 from app.vista.menus.view_menu_gerente import menu_gerente
 from app.vista.menus.view_menu_empleado import menu_empleado
-
-
-
 
 def autentificacion(nombre_usuario, pw):
     cone = None
@@ -42,16 +36,21 @@ def autentificacion(nombre_usuario, pw):
         return False
 
 def login_terminal():
-    saltar_pantalla()
-    print("\n=== LOGIN ECOTECH ===")
-    intentos = 3
-
+    intentos = 5  
+    
     while intentos > 0:
+        saltar_pantalla() 
+        print("\n=== LOGIN ECOTECH ===")
+        
         try:
             usuario = input("Nombre de usuario: ").strip()
+            
             if not usuario:
-                print("El usuario no puede estar vacío.")
-                continue
+                intentos -= 1 
+                print("ERROR: El usuario no puede estar vacío.")
+                print(f"Intentos restantes: {intentos}")
+                input("Presione Enter para intentar de nuevo...") 
+                continue 
                 
             password = getpass.getpass("Contraseña: ")
 
@@ -60,7 +59,6 @@ def login_terminal():
                 print(f"Bienvenido {sesion.nombre_usuario} | Rol: {sesion.rol_actual.upper()}")
                 print("-" * 30)
 
-                # Redirección según rol
                 if sesion.rol_actual == "admin":
                     saltar_pantalla()
                     menu_admin()
@@ -72,18 +70,20 @@ def login_terminal():
                     menu_empleado()
                 else:
                     print("Rol desconocido o sin permisos asignados.")
+                    input("Presione Enter para continuar...")
                 return 
 
             else:
                 intentos -= 1
                 print(f"Credenciales incorrectas. Intentos restantes: {intentos}")
+                input("Presione Enter para intentar de nuevo...") 
 
         except KeyboardInterrupt:
             print("\n\nOperacion cancelada por el usuario.")
             return
 
     print("Demasiados intentos fallidos. Acceso bloqueado temporalmente.")
-
+    input("Presione Enter para volver al menú principal...")
 
 def main():
     print("Verificando sistema de base de datos...")
@@ -93,6 +93,9 @@ def main():
         sys.exit()
     try:
         while True:
+
+            saltar_pantalla() 
+            
             print("\n" + "="*30)
             print("SISTEMA PRINCIPAL")
             print("="*30)
@@ -107,17 +110,18 @@ def main():
 
                 elif op == "2":
                     print("Cerrando sistema...")
-                    saltar_pantalla()
                     break 
 
                 else:
                     print("Opcion no valida, intente de nuevo.")
+                    input("Presione Enter para continuar...") 
             
             except KeyboardInterrupt:
                 print("\nInterrupción de teclado detectada...")
                 break
             except Exception as e:
                 print(f"Error en el menu principal: {e}")
+                input("Presione Enter para continuar...")
 
     finally:
         borrar_base_datos()

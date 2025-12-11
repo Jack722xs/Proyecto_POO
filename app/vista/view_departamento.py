@@ -4,125 +4,215 @@ from app.controlador.DAO_usuario import verUsuarioPorEmpleado
 from app.utils.helper import *
 
 def input_no_vacio(mensaje, max_intentos=5):
-    # (Mantener lógica)
     intentos = 0
     while intentos < max_intentos:
         dato = input(mensaje).strip()
-        if dato != "": return dato
+        if dato != "": 
+            return dato
         intentos += 1
-        print(f"Este campo no puede estar vacio. Intento {intentos}/{max_intentos}")
-    print("Demasiados intentos fallidos. Operacion cancelada.")
+        print(f"Error: Este campo no puede estar vacío. Intento {intentos}/{max_intentos}")
+    print("Demasiados intentos fallidos. Operación cancelada.")
     return None
 
+# ========================================================
+# OPCIÓN 1: AGREGAR DEPARTAMENTO
+# ========================================================
 def addDepartamento():
-    # (Mantener igual)
     while True:
-        print("AGREGAR DEPARTAMENTO")
-        id_depart = input_no_vacio("Ingrese ID: ")
-        if id_depart is None: return
-        proposito_depart = input_no_vacio("Ingrese proposito: ")
-        if proposito_depart is None: return
+        saltar_pantalla()
+        print("============================================")
+        print("           AGREGAR DEPARTAMENTO             ")
+        print("============================================")
+        
+        id_depart = input_no_vacio("Ingrese ID (ej: DPT001): ")
+        if id_depart is None: break
+        
+        proposito_depart = input_no_vacio("Ingrese propósito: ")
+        if proposito_depart is None: break
+        
         nombre_depart = input_no_vacio("Ingrese nombre: ")
-        if nombre_depart is None: return
+        if nombre_depart is None: break
 
         dep = departamento(id_depart, proposito_depart, nombre_depart, None)
+        
+        print("-" * 40)
         if agregarDepartamento(dep):
-            print("Departamento agregado correctamente.")
+            print("¡Departamento agregado correctamente!")
         else:
-            print("No se pudo agregar el departamento.")
+            print("Error: No se pudo agregar el departamento (revise si el ID ya existe).")
 
-        opcion = input("\n¿Desea agregar otro departamento? (s/n): ").lower()
+        print("-" * 40)
+        opcion = input("¿Desea agregar otro departamento? (s/n): ").strip().lower()
         if opcion != "s":
-            print("Saliendo del registro de departamentos...")
-            saltar_pantalla()
             break
-        input("Presiona enter para continuar")
 
+# ========================================================
+# OPCIÓN 2: EDITAR DEPARTAMENTO (CORREGIDO)
+# ========================================================
 def editDepartamento():
-    print("EDITAR DEPARTAMENTO")
-    # MOSTRAR LISTA
-    readDepartamento(pausar=False)
+    saltar_pantalla()
+    print("============================================")
+    print("            EDITAR DEPARTAMENTO             ")
+    print("============================================")
+    
+    # 1. Obtener lista actual para validar existencia
+    departamentos_actuales = verDepartamento()
+    
+    if not departamentos_actuales:
+        print("No hay departamentos registrados para editar.")
+        input("Presiona Enter para continuar...")
+        return
 
-    id_depart = input_no_vacio("Ingrese ID del departamento a editar: ")
-    if id_depart is None: return
-    proposito_depart = input_no_vacio("Ingrese nuevo proposito: ")
+    # Mostrar lista
+    print(f"{'ID':<12} {'Nombre':<20}")
+    print("-" * 32)
+    lista_ids = []
+    for fila in departamentos_actuales:
+        d_id = str(fila[0])
+        lista_ids.append(d_id)
+        print(f"{d_id:<12} {fila[2]:<20}")
+    print("=" * 80)
+    
+    print("-" * 40)
+    id_depart = input("Ingrese ID del departamento a editar: ").strip()
+    
+    if not id_depart:
+        print("Error: El ID no puede estar vacío.")
+        input("Presiona Enter para continuar...")
+        return
+
+    # --- VALIDACIÓN CRÍTICA ---
+    # Verificamos si el ID existe ANTES de pedir datos nuevos
+    if id_depart not in lista_ids:
+        print(f"\nError: El departamento con ID '{id_depart}' NO existe.")
+        print("Operación cancelada para evitar ingreso de datos innecesario.")
+        input("Presiona Enter para continuar...")
+        return
+    # --------------------------
+
+    # Si pasa la validación, pedimos los datos
+    print(f"\n--- Editando Departamento {id_depart} ---")
+    proposito_depart = input_no_vacio("Nuevo propósito: ")
     if proposito_depart is None: return
-    nombre_depart = input_no_vacio("Ingrese nuevo nombre: ")
+    
+    nombre_depart = input_no_vacio("Nuevo nombre: ")
     if nombre_depart is None: return
 
     dep = departamento(id_depart, proposito_depart, nombre_depart, None)
+    
+    print("-" * 40)
     if editarDepartamento(dep):
         print("Departamento actualizado correctamente.")
     else:
-        print("No se pudo actualizar el departamento (ID inexistente).")
+        print("Error: Ocurrió un problema al intentar actualizar en la base de datos.")
 
-    input("Presiona enter para continuar")    
+    input("Presiona Enter para continuar...")
 
-def readDepartamento(pausar=True): # PARAMETRO NUEVO
-    departamentos = verDepartamento()
-    if not departamentos:
-        print("\nNo hay departamentos registrados.\n")
-        if pausar: input("Presiona enter para continuar")
-        return
-    print("\n" + "="*100)
-    print(f"{'ID':<12} {'Nombre':<20} {'Gerente':<15} {'Propósito'}")
-    print("="*100)
-
-    for fila in departamentos:
-        id_dep, proposito, nombre, gerente = fila
-        id_str = str(id_dep)
-        nombre_str = str(nombre)
-        gerente_str = str(gerente) if gerente else "Sin Asignar"
-        proposito_str = str(proposito)
-        print(f"{id_str:<12} {nombre_str:<20} {gerente_str:<15} {proposito_str}")
-    
-    print("="*100 + "\n")
-    if pausar:
-        input("Presiona enter para continuar")
-
-
+# ========================================================
+# OPCIÓN 3: ELIMINAR DEPARTAMENTO
+# ========================================================
 def delDepartamento():
-    print("ELIMINAR DEPARTAMENTO")
-    # MOSTRAR LISTA
+    saltar_pantalla()
+    print("============================================")
+    print("           ELIMINAR DEPARTAMENTO            ")
+    print("============================================")
+    
     readDepartamento(pausar=False)
 
-    id_depart = input_no_vacio("Ingrese el ID a eliminar: ")
-    if id_depart is None: return
-
-    if eliminarDepartamento(id_depart):
-        print("Departamento eliminado correctamente.")
-    else:
-        print("No se encontro un departamento con ese ID.")
-    input("Presiona enter para continuar")      
-
-def asignarGerente_view():
-    print("=== ASIGNAR GERENTE A DEPARTAMENTO ===")
+    print("-" * 40)
+    id_depart = input("Ingrese el ID a eliminar: ").strip()
     
-    # OPCIONAL: Mostrar departamentos para ver IDs
+    if not id_depart:
+        print("Error: El ID no puede estar vacío.")
+        input("Presiona Enter para continuar...")
+        return
+
+    # Validación previa opcional para mejor UX (Check de existencia)
+    # (Se puede implementar similar a editDepartamento si se desea)
+
+    confirmacion = input(f"¿Está seguro que desea eliminar el departamento {id_depart}? (s/n): ").lower()
+    if confirmacion == 's':
+        if eliminarDepartamento(id_depart):
+            print("Departamento eliminado correctamente.")
+        else:
+            print("Error: No se encontró un departamento con ese ID o no se pudo eliminar.")
+    else:
+        print("Operación cancelada.")
+        
+    input("Presiona Enter para continuar...")
+
+# ========================================================
+# OPCIÓN 4: VER DEPARTAMENTOS
+# ========================================================
+def readDepartamento(pausar=True):
+    if pausar:
+        saltar_pantalla()
+        print("============================================")
+        print("           LISTA DE DEPARTAMENTOS           ")
+        print("============================================")
+
+    departamentos = verDepartamento()
+    
+    if not departamentos:
+        print("\nNo hay departamentos registrados.\n")
+    else:
+        print(f"{'ID':<12} {'Nombre':<20} {'Gerente':<20} {'Propósito'}")
+        print("="*80)
+
+        for fila in departamentos:
+            id_dep = str(fila[0])
+            proposito = str(fila[1])
+            nombre = str(fila[2])
+            gerente = str(fila[3]) if fila[3] else "Sin Asignar"
+            
+            print(f"{id_dep:<12} {nombre:<20} {gerente:<20} {proposito}")
+        print("="*80)
+    
+    if pausar:
+        input("\nPresiona Enter para continuar...")
+
+# ========================================================
+# OPCIÓN 10: ASIGNAR GERENTE (Lógica de Vista)
+# ========================================================
+def asignarGerente_view():
+    saltar_pantalla()
+    print("============================================")
+    print("      ASIGNAR GERENTE A DEPARTAMENTO        ")
+    print("============================================")
+    
+    # 1. Mostrar Departamentos
     print("\n--- DEPARTAMENTOS ---")
     readDepartamento(pausar=False)
 
-    id_depart = input("ID del departamento: ").strip()
-    id_empleado = input("ID del empleado que sera gerente: ").strip()
-
-    if not id_depart or not id_empleado:
-        print("ID de departamento y empleado no pueden estar vacios.")
+    id_depart = input("\nID del departamento: ").strip()
+    if not id_depart:
+        print("Error: ID vacío.")
+        input("Presiona Enter...")
         return
 
-    # Buscar usuario asociado a ese empleado
+    # 2. Pedir Empleado
+    id_empleado = input("ID del empleado candidato: ").strip()
+    if not id_empleado:
+        print("Error: ID vacío.")
+        input("Presiona Enter...")
+        return
+
+    # 3. Validar Rol
     usuario = verUsuarioPorEmpleado(id_empleado)
     if not usuario:
         print("ERROR: Este empleado no tiene un usuario asociado.")
+        input("Presiona Enter...")
         return
     
-    nombre_usuario, email, rol, id_emp = usuario
-    if rol != "gerente":
-        print("ERROR: Este usuario NO tiene el rol de GERENTE.")
+    rol = usuario[2]
+    if rol.lower() != "gerente":
+        print(f"ERROR: El usuario tiene rol '{rol}'. Se requiere rol 'gerente'.")
+        input("Presiona Enter...")
         return
 
     if asignarGerente(id_depart, id_empleado):
-        print(f"Gerente (empleado {id_empleado}) asignado correctamente al departamento {id_depart}.")
+        print(f"Gerente asignado correctamente al departamento {id_depart}.")
     else:
         print("No se pudo asignar el gerente.")
         
-    input("Presiona enter para continuar")
+    input("Presiona Enter para continuar...")

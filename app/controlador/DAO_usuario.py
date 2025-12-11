@@ -9,59 +9,48 @@ import mysql.connector
 def agregarUsuario(user: Usuario):
     try:
         sql = """
-            INSERT INTO usuario (contraseña, email, nombre_usuario, password_hash, rol, id_empleado)
-            VALUES (%s, %s, %s, %s, %s, %s)
+            INSERT INTO usuario (email, nombre_usuario, password_hash, rol, id_empleado)
+            VALUES (%s, %s, %s, %s, %s)
         """
-
         cone = getConexion()
         cursor = cone.cursor()
-
         cursor.execute(sql, (
-            user.get_contraseña(),
             user.get_email(),
             user.get_nombre_usuario(),
             user.get_password_hash(),
             user.get_rol(),
             user.get_id_empleado()
         ))
-
         cone.commit()
         cursor.close()
         cone.close()
         return True
-
     except mysql.connector.Error as ex:
         print("Error agregando usuario:", ex)
         return False
 
-
 def verUsuario():
     try:
-        sql = "SELECT contraseña, email, nombre_usuario, password_hash, rol, id_empleado FROM usuario"
-
+        sql = "SELECT email, nombre_usuario, password_hash, rol, id_empleado FROM usuario"
         cone = getConexion()
         cursor = cone.cursor()
         cursor.execute(sql)
         data = cursor.fetchall()
-
         cursor.close()
         cone.close()
-
         return data
-
     except mysql.connector.Error as ex:
         print("Error:", ex)
         return []
 
 def editarUsuario(user: Usuario):
     try:
-        sql = """UPDATE usuario SET contraseña=%s, email=%s, password_hash=%s, rol=%s WHERE nombre_usuario=%s"""
+        sql = """UPDATE usuario SET email=%s, password_hash=%s, rol=%s WHERE nombre_usuario=%s"""
         cone = getConexion()
         cursor = cone.cursor()
-        cursor.execute(sql, (user.get_contraseña(), user.get_email(), user.get_password_hash(), user.get_rol(), user.get_nombre_usuario()))
+        cursor.execute(sql, (user.get_email(), user.get_password_hash(), user.get_rol(), user.get_nombre_usuario()))
         cone.commit()
-        
-        filas = cursor.rowcount # CORRECCIÓN
+        filas = cursor.rowcount
         cursor.close()
         cone.close()
         return filas > 0
@@ -76,8 +65,7 @@ def eliminarUsuario(nombre_usuario):
         cursor = cone.cursor()
         cursor.execute(sql, (nombre_usuario,))
         cone.commit()
-        
-        filas = cursor.rowcount # CORRECCIÓN
+        filas = cursor.rowcount
         cursor.close()
         cone.close()
         return filas > 0
@@ -85,25 +73,20 @@ def eliminarUsuario(nombre_usuario):
         print("Error eliminando usuario:", ex)
         return False
     
-    
 def verUsuarioPorEmpleado(id_empleado):
     try:
         cone = getConexion()
         cursor = cone.cursor()
-
         sql = """
             SELECT nombre_usuario, email, rol, id_empleado
             FROM usuario
             WHERE id_empleado = %s
         """
-
         cursor.execute(sql, (id_empleado,))
         data = cursor.fetchone()
-
         cursor.close()
         cone.close()
         return data
-
     except mysql.connector.Error as ex:
         print("Error buscando usuario por empleado:", ex)
         return None

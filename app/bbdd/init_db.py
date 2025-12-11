@@ -56,7 +56,6 @@ def crear_bd():
         tablas['usuario'] = """
             CREATE TABLE IF NOT EXISTS usuario (
                 nombre_usuario VARCHAR(50) NOT NULL,
-                contraseña VARCHAR(100) NOT NULL,
                 email VARCHAR(100) NOT NULL,
                 password_hash VARCHAR(60) NOT NULL,
                 id_empleado INT(100) DEFAULT NULL,
@@ -76,7 +75,7 @@ def crear_bd():
                 PRIMARY KEY (id_registro)
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
         """
-
+        
         tablas['registro_indicadores'] = """
             CREATE TABLE IF NOT EXISTS registro_indicadores (
                 id_consulta INT(11) NOT NULL AUTO_INCREMENT,
@@ -182,14 +181,14 @@ def crear_bd():
         cursor.executemany(sql_proyecto, datos_proyecto)
 
         sql_usuario = """
-            INSERT IGNORE INTO usuario (nombre_usuario, contraseña, email, password_hash, id_empleado, rol) 
-            VALUES (%s, %s, %s, %s, %s, %s)
+            INSERT IGNORE INTO usuario (nombre_usuario, email, password_hash, id_empleado, rol) 
+            VALUES (%s, %s, %s, %s, %s)
         """
         datos_usuario = [
-            ('tello', '', 'jasda', '$2b$12$3zzpRFBREIgQkRG4cg3ZoOtUy2B8ZwCnUt8T0e3HegI7z9IPn/5SK', 202500008, 'gerente'),
-            ('claudia', '', 'asd', '$2b$12$u6XdqFiMh5Ahj7tq1vfcJuszUBXqnha/OgVJVrvQZIMXhEc2r4wOO', 202500002, 'empleado'),
-            ('admin', '', 'admin@ecotech.com', '$2b$12$9k.97y6IKMSaAVEtDbTOyuDdP8GoVJep9zXjinEYY8H6ZED9O0H6O', None, 'admin'),
-            ('jacson', '1234', 'jacson', '$2b$12$kqDUCiLQtXE5FuZyTOBYIukJZ7rYh6lRFUYFWo1QZ6yesd/NIq73i', 217743125, 'gerente')
+            ('tello', 'jasda', '$2b$12$3zzpRFBREIgQkRG4cg3ZoOtUy2B8ZwCnUt8T0e3HegI7z9IPn/5SK', 202500008, 'gerente'),
+            ('claudia', 'asd', '$2b$12$u6XdqFiMh5Ahj7tq1vfcJuszUBXqnha/OgVJVrvQZIMXhEc2r4wOO', 202500002, 'empleado'),
+            ('admin', 'admin@ecotech.com', '$2b$12$9k.97y6IKMSaAVEtDbTOyuDdP8GoVJep9zXjinEYY8H6ZED9O0H6O', None, 'admin'),
+            ('jacson', 'jacson', '$2b$12$kqDUCiLQtXE5FuZyTOBYIukJZ7rYh6lRFUYFWo1QZ6yesd/NIq73i', 217743125, 'gerente')
         ]
         cursor.executemany(sql_usuario, datos_usuario)
 
@@ -212,9 +211,7 @@ def crear_bd():
         ]
 
         cursor.execute("INSERT IGNORE INTO proyecto (id_proyecto, nombre, descripcion, fecha_inicio, fecha_fin, estado_proyecto, id_empleado) VALUES ('111', 'Proyecto Base', 'Auto-generado', '2025-01-01', '2025-12-31', 'Activo', 0)")
-        
         cursor.executemany(sql_emp_proy, datos_emp_proy)
-
         cursor.execute("INSERT IGNORE INTO proyecto_departamento (id_proyecto, id_depart) VALUES ('217743127', '217743126')")
 
         print("Base de datos y datos iniciales cargados correctamente.")
@@ -232,32 +229,28 @@ def crear_bd():
         except:
             pass
         return False
-    
+
 def borrar_base_datos():
     config = {
         'host': 'localhost',
         'user': 'root',
         'password': ''
     }
+
     
     try:
         cone = mysql.connector.connect(**config)
         cursor = cone.cursor()
-        
         sql = "DROP DATABASE IF EXISTS ecotech"
         cursor.execute(sql)
-        
         print("\n" + "="*40)
         print(" SISTEMA DE LIMPIEZA")
         print("="*40)
         print("Base de datos 'ecotech' eliminada correctamente.")
-        print("Datos temporales borrados por seguridad.")
         print("="*40 + "\n")
-        
         cursor.close()
         cone.close()
         return True
-        
     except mysql.connector.Error as err:
         print(f"Error al borrar la base de datos: {err}")
         return False    
