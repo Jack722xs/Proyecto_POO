@@ -6,98 +6,115 @@ from app.utils.helper import *
 
 def menu_empleado():
     while True:
-
         saltar_pantalla()
-
-        
         print("""
 ============================================
                MENÚ EMPLEADO
 ============================================
-1. Ver mis datos
-2. Ver mis proyectos
-3. Registrar horas trabajadas
-4. Ver mis registros de horas
+1. Ver mis datos                           =
+2. Ver mis proyectos                       =
+3. Registrar horas trabajadas              =
+4. Ver mis registros de horas              =
+============================================
 5. Salir
 """)
 
-        opc = input("Seleccione una opción: ")
-
-        # ---------------------------------------------
-        #    Validación para seguridad
-        # ---------------------------------------------
+        # Validación de seguridad de sesión
         if sesion.id_empleado_actual is None:
-            print("ERROR: No hay un empleado asociado al usuario.")
-            return  # vuelve al login
-
-        if opc == "1":
-            ver_mis_datos()
-
-        elif opc == "2":
-            ver_mis_proyectos()
-
-        elif opc == "3":
-            addRegistroTiempo()
-
-        elif opc == "4":
-            verRegistrosEmpleado()
-
-        elif opc == "5":
-            print("Cerrando menú empleado...")
+            print("\nERROR CRÍTICO: No hay un empleado asociado a este usuario.")
+            print("Comuníquese con el administrador.")
+            input("Presiona Enter para salir...")
             break
 
+        try:
+            entrada = input("Seleccione una opción: ").strip()
+            if not entrada:
+                continue
+            opc = int(entrada)
+        except ValueError:
+            print("Error: Ingrese un número válido.")
+            input("Presiona Enter para continuar...")
+            continue
+
+        if opc == 1:
+            ver_mis_datos()
+        elif opc == 2:
+            ver_mis_proyectos()
+        elif opc == 3:
+            addRegistroTiempo()
+        elif opc == 4:
+            verRegistrosEmpleado()
+        elif opc == 5:
+            print("Cerrando sesión...")
+            saltar_pantalla()
+            break
         else:
             print("Opción inválida.")
+            input("Presiona Enter para continuar...")
 
 
 # ==========================================================
 #   VER DATOS DEL EMPLEADO ACTUAL
 # ==========================================================
-from app.controlador.DAO_empleado import verEmpleado
-
 def ver_mis_datos():
+    saltar_pantalla()
+    print("============================================")
+    print("                MIS DATOS                   ")
+    print("============================================")
+
     try:
         datos = verEmpleadoPorID(sesion.id_empleado_actual)
+        
         if not datos:
             print("No se pudo obtener la información del empleado.")
-            return
-        
-        print("\n=== MIS DATOS ===")
-        print(f"ID: {datos[0]}")
-        print(f"Nombre: {datos[1]}")
-        print(f"Apellido: {datos[2]}")
-        print(f"Direccion: {datos[3]}")
-        print(f"Email: {datos[4]}")
-        print(f"Salario: {datos[5]}")
-        print(f"Telefono: {datos[6]}")
-        print(f"Gerente: {'Si' if datos[7] else 'No'}")
-        print(f"Departamento: {datos[8]}")
-        print("=================\n")
+        else:
+            # datos es una tupla, ajustamos índices según tu BD
+            # 0:id, 1:nombre, 2:apellido, 3:telefono, 4:email, 5:salario, 6:direc, 7:gerente
+            
+            print(f" ID:          {datos[0]}")
+            print(f" Nombre:      {datos[1]}")
+            print(f" Apellido:    {datos[2]}")
+            print(f" Email:       {datos[4]}")
+            print(f" Teléfono:    {datos[3]}")
+            print(f" Dirección:   {datos[6]}")
+            print(f" Cargo:       {'Gerente' if datos[7] else 'Empleado'}")
+            
+            # Nota: El salario a veces es sensible, se muestra si se desea
+            # print(f" Salario:     ${datos[5]}") 
 
     except Exception as e:
-        print("Error al obtener datos del empleado:", e)
-
+        print(f"Error al obtener datos: {e}")
+    
+    print("============================================")
+    input("\nPresiona Enter para continuar...")
 
 
 # ==========================================================
 #   VER PROYECTOS ASOCIADOS AL EMPLEADO ACTUAL
 # ==========================================================
 def ver_mis_proyectos():
+    saltar_pantalla()
+    print("============================================")
+    print("              MIS PROYECTOS                 ")
+    print("============================================")
+
     try:
         proyectos = verProyectosDeEmpleado(sesion.id_empleado_actual)
 
-        print("\n=== MIS PROYECTOS ===")
         if not proyectos:
-            print("No estás asignado a ningún proyecto.")
-            return
-
-        for p in proyectos:
-            print(f"- {p}")
-
-        print("=====================\n")
+            print("\nNo estás asignado a ningún proyecto actualmente.")
+        else:
+            print(f"{'ID':<12} {'Nombre':<20} {'Estado'}")
+            print("-" * 45)
+            for p in proyectos:
+                # Asumiendo p[0]=id, p[1]=nombre, p[5]=estado
+                p_id = str(p[0])
+                p_nom = str(p[1])
+                p_est = str(p[5]) if len(p) > 5 else "N/A"
+                print(f"{p_id:<12} {p_nom:<20} {p_est}")
+            print("-" * 45)
 
     except Exception as e:
-        print("Error al obtener proyectos:", e)
+        print(f"Error al obtener proyectos: {e}")
 
-
-
+    input("\nPresiona Enter para continuar...")
