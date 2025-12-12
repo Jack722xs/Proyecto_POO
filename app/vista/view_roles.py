@@ -1,7 +1,7 @@
 from app.utils.helper import *
 from app.controlador.DAO_roles import obtenerRol, cambiarRol, listarRolesValidos
-from app.controlador.DAO_usuario import verUsuario # Para validar existencia
-from app.vista.view_usuario import readUsuario # Para mostrar la lista visualmente
+from app.controlador.DAO_usuario import verUsuario 
+from app.vista.view_usuario import readUsuario 
 
 def menu_roles():
     while True:
@@ -56,7 +56,6 @@ def ver_rol_usuario():
     print("            VER ROL DE USUARIO              ")
     print("============================================")
     
-    # 1. Mostrar lista de usuarios disponibles
     print("\n--- USUARIOS DISPONIBLES ---")
     readUsuario(pausar=False)
     
@@ -66,7 +65,6 @@ def ver_rol_usuario():
         input("Presiona Enter para continuar...")
         return
 
-    # 2. Consultar Rol (DAO ya valida si existe en la consulta)
     rol = obtenerRol(nombre)
 
     print("-" * 40)
@@ -83,7 +81,6 @@ def cambiar_rol_usuario():
     print("          CAMBIAR ROL DE USUARIO            ")
     print("============================================")
 
-    # 1. Mostrar usuarios
     print("\n--- USUARIOS DISPONIBLES ---")
     readUsuario(pausar=False)
 
@@ -93,9 +90,8 @@ def cambiar_rol_usuario():
         input("Presiona Enter para continuar...")
         return
 
-    # 2. Validar existencia REAL del usuario antes de pedir el rol
-    usuarios = verUsuario() # Trae todos los usuarios de la BD
-    # Buscamos si el nombre ingresado está en la lista (índice 1 es nombre_usuario)
+    usuarios = verUsuario() 
+
     existe = False
     for u in usuarios:
         if u[1] == nombre:
@@ -108,7 +104,6 @@ def cambiar_rol_usuario():
         input("Presiona Enter para continuar...")
         return
 
-    # 3. Mostrar Roles y Pedir nuevo
     print("\n--- ROLES VÁLIDOS ---")
     roles = listarRolesValidos()
     print(", ".join(roles))
@@ -116,12 +111,10 @@ def cambiar_rol_usuario():
     nuevo_rol = input("\nIngrese el nuevo rol: ").strip().lower()
 
     print("-" * 40)
-    # cambiarRol valida internamente si el rol es válido
+
     if cambiarRol(nombre, nuevo_rol):
-        # El DAO suele imprimir el éxito, pero reforzamos por si acaso
         pass 
     else:
         print("No se pudo actualizar el rol (verifique que el rol sea válido).")
 
-    # Corrección del error de tipeo "/n"
     input("Presiona Enter para continuar...")

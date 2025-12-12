@@ -1,7 +1,6 @@
 import json
 
 def exportar_datos_a_json(datos, nombre_archivo):
-# guarda lista de diccionarios en un archivo JSON
     if not nombre_archivo.endswith('.json'):
         nombre_archivo += '.json'
     

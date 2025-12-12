@@ -28,14 +28,12 @@ def menu_indicadores():
             input("Presiona Enter para continuar...")
             continue
 
-        # --- LOGICA COMÚN PARA TODAS LAS OPCIONES (1-6) ---
         procesar_consulta(opc)
 
 
 def procesar_consulta(opc):
     """Maneja el flujo de consulta de fecha, API y guardado."""
     
-    # 1. Selección de Fecha
     fecha_str = None
     while True:
         saltar_pantalla()
@@ -50,7 +48,7 @@ def procesar_consulta(opc):
         tipo_fecha = input("\nSelección: ").strip()
 
         if tipo_fecha == "1":
-            fecha_str = None # Hoy
+            fecha_str = None 
             break
         elif tipo_fecha == "2":
             while True:
@@ -61,18 +59,17 @@ def procesar_consulta(opc):
                 print("Error: La fecha no puede estar vacía.")
             break
         elif tipo_fecha == "3":
-            return # Volver al menú anterior
+            return 
         else:
             print("Error: Opción no válida.")
             input("Presiona Enter para reintentar...")
 
-    # 2. Consultar API
+
     saltar_pantalla()
     print("Consultando API externa, por favor espere...")
     
     datos, mensaje = obtener_indicador(opc, fecha_str)
 
-    # 3. Mostrar Resultados
     saltar_pantalla()
     if datos:
         print("============================================")
@@ -84,7 +81,6 @@ def procesar_consulta(opc):
         print(f" ORIGEN:    {datos['origen']}")
         print("============================================")
 
-        # 4. Guardar en Historial
         while True:
             guardar = input("\n¿Guardar esta consulta en el historial? (s/n): ").strip().lower()
             
@@ -105,6 +101,5 @@ def procesar_consulta(opc):
         print("============================================")
         print(f"Detalle: {mensaje}")
     
-    # Pausa final para leer antes de volver al menú principal
     print("-" * 44)
     input("Presiona Enter para continuar...")

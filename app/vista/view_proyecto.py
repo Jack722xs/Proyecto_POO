@@ -12,9 +12,6 @@ def input_no_vacio(mensaje, max_intentos=5):
     print("Demasiados intentos fallidos. Operación cancelada.")
     return None
 
-# ========================================================
-# OPCIÓN 1: AGREGAR PROYECTO
-# ========================================================
 def addProyecto():
     while True:
         saltar_pantalla()
@@ -25,7 +22,6 @@ def addProyecto():
         id_proyecto = input_no_vacio("ID Proyecto (ej: PRJ001): ")
         if id_proyecto is None: break
         
-        # Validación opcional: Verificar si ya existe el ID antes de pedir el resto
         if verProyecto(id_proyecto):
              print(f"Error: El ID '{id_proyecto}' ya existe.")
              input("Presiona Enter para continuar...")
@@ -37,7 +33,6 @@ def addProyecto():
         descripcion = input_no_vacio("Descripción: ")
         if descripcion is None: break
         
-        # Validación básica de formato de fecha podría agregarse aquí
         fecha_inicio = input_no_vacio("Fecha Inicio (YYYY-MM-DD): ")
         if fecha_inicio is None: break
         
@@ -47,7 +42,6 @@ def addProyecto():
         estado = input_no_vacio("Estado (Activo/Planificado/Terminado): ")
         if estado is None: break
 
-        # Crear objeto (id_empleado es None por defecto, se asigna en el menú de asignación)
         proy = proyecto(id_proyecto, nombre, descripcion, fecha_inicio, fecha_fin, estado, None)
         
         print("-" * 40)
@@ -61,16 +55,13 @@ def addProyecto():
         if opcion != "s":
             break
 
-# ========================================================
-# OPCIÓN 2: EDITAR PROYECTO
-# ========================================================
+
 def editProyecto():
     saltar_pantalla()
     print("============================================")
     print("              EDITAR PROYECTO               ")
     print("============================================")
     
-    # 1. Obtener y mostrar lista para referencia
     proyectos_actuales = verProyectos()
     
     if not proyectos_actuales:
@@ -78,19 +69,16 @@ def editProyecto():
         input("Presiona Enter para continuar...")
         return
 
-    # Mostrar tabla simplificada
     print(f"{'ID':<12} {'Nombre':<20} {'Estado'}")
     print("-" * 45)
     lista_ids = []
     for p in proyectos_actuales:
         p_id = str(p[0])
         lista_ids.append(p_id)
-        # Ajustar índices según tu DAO (0:id, 1:nombre, 5:estado aprox)
         estado = str(p[5]) if len(p) > 5 else "N/A"
         print(f"{p_id:<12} {p[1]:<20} {estado}")
     print("=" * 80)
 
-    # 2. Pedir ID
     id_proyecto = input("\nIngrese ID del proyecto a editar: ").strip()
     
     if not id_proyecto:
@@ -98,13 +86,11 @@ def editProyecto():
         input("Presiona Enter para continuar...")
         return
 
-    # --- VALIDACIÓN: El ID debe existir ---
     if id_proyecto not in lista_ids:
         print(f"\nError: El proyecto con ID '{id_proyecto}' NO existe.")
         print("Operación cancelada.")
         input("Presiona Enter para continuar...")
         return
-    # --------------------------------------
 
     print(f"\n--- Editando datos de {id_proyecto} ---")
     
@@ -123,7 +109,6 @@ def editProyecto():
     estado = input_no_vacio("Nuevo Estado: ")
     if estado is None: return
 
-    # Objeto actualizado
     proy = proyecto(id_proyecto, nombre, descripcion, fecha_inicio, fecha_fin, estado, None)
 
     print("-" * 40)
@@ -134,9 +119,6 @@ def editProyecto():
 
     input("Presiona Enter para continuar...")
 
-# ========================================================
-# OPCIÓN 3: ELIMINAR PROYECTO
-# ========================================================
 def delProyecto():
     saltar_pantalla()
     print("============================================")
@@ -164,9 +146,7 @@ def delProyecto():
         
     input("Presiona Enter para continuar...")
 
-# ========================================================
-# OPCIÓN 4: VER PROYECTOS
-# ========================================================
+
 def readProyecto(pausar=True):
     if pausar:
         saltar_pantalla()
@@ -179,19 +159,14 @@ def readProyecto(pausar=True):
     if not proyectos:
         print("\nNo hay proyectos registrados.\n")
     else:
-        # Encabezado formateado
-        # Ajusta columnas según ancho de pantalla
         print(f"{'ID':<10} {'Nombre':<18} {'Descripción':<25} {'Inicio':<12} {'Fin':<12} {'Estado'}")
         print("="*90)
 
         for p in proyectos:
-            # Indices: 0:id, 1:nom, 2:desc, 3:ini, 4:fin, 5:estado
             p_id = str(p[0])
             nom = str(p[1])
             desc = str(p[2])
-            # Truncar descripción larga visualmente
             if len(desc) > 22: desc = desc[:20] + "..."
-            
             ini = str(p[3])
             fin = str(p[4])
             est = str(p[5])

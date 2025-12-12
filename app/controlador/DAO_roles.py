@@ -1,7 +1,7 @@
 from app.bbdd.conexion import getConexion
 import mysql.connector
 
-# Lista de roles validos
+
 ROLES_VALIDOS = ["admin", "gerente", "empleado"]
 
 

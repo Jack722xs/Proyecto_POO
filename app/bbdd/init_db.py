@@ -1,7 +1,7 @@
 import mysql.connector
-import bcrypt # Asegúrate de tener instalado: pip install bcrypt
+import bcrypt 
 
-# Función auxiliar local para hashear en la inicialización
+
 def hash_demo(password):
     return bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt()).decode('utf-8')
 
@@ -21,7 +21,7 @@ def crear_bd():
 
         tablas = {}
 
-        # 1. TABLAS PRINCIPALES
+
         tablas['departamento'] = """
             CREATE TABLE IF NOT EXISTS departamento (
                 id_depart VARCHAR(15) NOT NULL,
@@ -59,7 +59,6 @@ def crear_bd():
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
         """
 
-        # TABLA USUARIO SEGURA (Con FK)
         tablas['usuario'] = """
             CREATE TABLE IF NOT EXISTS usuario (
                 nombre_usuario VARCHAR(50) NOT NULL,
@@ -86,7 +85,6 @@ def crear_bd():
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
         """
 
-        # TABLAS DE RELACIÓN (MANY TO MANY)
         tablas['empleado_departamento'] = """
             CREATE TABLE IF NOT EXISTS empleado_departamento (
                 id_empleado INT(11) NOT NULL,
@@ -117,7 +115,6 @@ def crear_bd():
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
         """
 
-        # Otras tablas
         tablas['usuario_empleado'] = """
             CREATE TABLE IF NOT EXISTS usuario_empleado (
                 id_empleado INT(11) NOT NULL,
@@ -139,7 +136,7 @@ def crear_bd():
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
         """
 
-        # Orden de creación para respetar FK
+
         orden = ['departamento', 'empleado', 'proyecto', 'usuario', 'registro_tiempo', 
                  'empleado_departamento', 'empleado_proyecto', 'proyecto_departamento', 
                  'usuario_empleado', 'registro_indicadores']
@@ -147,10 +144,9 @@ def crear_bd():
         for t in orden:
             cursor.execute(tablas[t])
 
-        # --- INSERCIONES INICIALES ---
         print("Insertando datos iniciales...")
 
-        # 1. Empleados
+
         sql_empleado = """INSERT IGNORE INTO empleado (id_empleado, nombre, apellido, email, salario, direccion, es_gerente) 
                           VALUES (%s, %s, %s, %s, %s, %s, %s)"""
         datos_empleado = [
@@ -161,18 +157,14 @@ def crear_bd():
         ]
         cursor.executemany(sql_empleado, datos_empleado)
 
-        # 2. Departamentos
         sql_dep = "INSERT IGNORE INTO departamento (id_depart, nombre_depart, proposito_depart) VALUES (%s, %s, %s)"
         datos_dep = [('DPT001', 'Marketing', 'Ventas'), ('DPT002', 'RRHH', 'Personal')]
         cursor.executemany(sql_dep, datos_dep)
 
-        # 3. Proyectos
         sql_proy = "INSERT IGNORE INTO proyecto (id_proyecto, nombre, descripcion, fecha_inicio, fecha_fin, estado_proyecto) VALUES (%s, %s, %s, %s, %s, %s)"
         datos_proy = [('PRJ001', 'Web 2.0', 'Renovación Web', '2025-01-01', '2025-06-01', 'Activo')]
         cursor.executemany(sql_proy, datos_proy)
 
-        # 4. USUARIOS (AQUÍ GENERAMOS LOS HASHES REALES)
-        # La contraseña será igual al nombre de usuario para facilitar pruebas
         sql_usuario = """INSERT IGNORE INTO usuario (nombre_usuario, email, password_hash, id_empleado, rol) 
                          VALUES (%s, %s, %s, %s, %s)"""
         datos_usuario = [

@@ -14,9 +14,7 @@ def input_no_vacio(mensaje, max_intentos=5):
     print("Demasiados intentos fallidos. Operación cancelada.")
     return None
 
-# ========================================================
-# OPCIÓN 1: AGREGAR DEPARTAMENTO
-# ========================================================
+
 def addDepartamento():
     while True:
         saltar_pantalla()
@@ -46,16 +44,13 @@ def addDepartamento():
         if opcion != "s":
             break
 
-# ========================================================
-# OPCIÓN 2: EDITAR DEPARTAMENTO (CORREGIDO)
-# ========================================================
+
 def editDepartamento():
     saltar_pantalla()
     print("============================================")
     print("            EDITAR DEPARTAMENTO             ")
     print("============================================")
     
-    # 1. Obtener lista actual para validar existencia
     departamentos_actuales = verDepartamento()
     
     if not departamentos_actuales:
@@ -63,7 +58,6 @@ def editDepartamento():
         input("Presiona Enter para continuar...")
         return
 
-    # Mostrar lista
     print(f"{'ID':<12} {'Nombre':<20}")
     print("-" * 32)
     lista_ids = []
@@ -81,8 +75,6 @@ def editDepartamento():
         input("Presiona Enter para continuar...")
         return
 
-    # --- VALIDACIÓN CRÍTICA ---
-    # Verificamos si el ID existe ANTES de pedir datos nuevos
     if id_depart not in lista_ids:
         print(f"\nError: El departamento con ID '{id_depart}' NO existe.")
         print("Operación cancelada para evitar ingreso de datos innecesario.")
@@ -90,7 +82,6 @@ def editDepartamento():
         return
     # --------------------------
 
-    # Si pasa la validación, pedimos los datos
     print(f"\n--- Editando Departamento {id_depart} ---")
     proposito_depart = input_no_vacio("Nuevo propósito: ")
     if proposito_depart is None: return
@@ -108,9 +99,6 @@ def editDepartamento():
 
     input("Presiona Enter para continuar...")
 
-# ========================================================
-# OPCIÓN 3: ELIMINAR DEPARTAMENTO
-# ========================================================
 def delDepartamento():
     saltar_pantalla()
     print("============================================")
@@ -127,9 +115,6 @@ def delDepartamento():
         input("Presiona Enter para continuar...")
         return
 
-    # Validación previa opcional para mejor UX (Check de existencia)
-    # (Se puede implementar similar a editDepartamento si se desea)
-
     confirmacion = input(f"¿Está seguro que desea eliminar el departamento {id_depart}? (s/n): ").lower()
     if confirmacion == 's':
         if eliminarDepartamento(id_depart):
@@ -141,9 +126,6 @@ def delDepartamento():
         
     input("Presiona Enter para continuar...")
 
-# ========================================================
-# OPCIÓN 4: VER DEPARTAMENTOS
-# ========================================================
 def readDepartamento(pausar=True):
     if pausar:
         saltar_pantalla()
@@ -171,16 +153,13 @@ def readDepartamento(pausar=True):
     if pausar:
         input("\nPresiona Enter para continuar...")
 
-# ========================================================
-# OPCIÓN 10: ASIGNAR GERENTE (Lógica de Vista)
-# ========================================================
+
 def asignarGerente_view():
     saltar_pantalla()
     print("============================================")
     print("      ASIGNAR GERENTE A DEPARTAMENTO        ")
     print("============================================")
     
-    # 1. Mostrar Departamentos
     print("\n--- DEPARTAMENTOS ---")
     readDepartamento(pausar=False)
 
@@ -190,14 +169,12 @@ def asignarGerente_view():
         input("Presiona Enter...")
         return
 
-    # 2. Pedir Empleado
     id_empleado = input("ID del empleado candidato: ").strip()
     if not id_empleado:
         print("Error: ID vacío.")
         input("Presiona Enter...")
         return
 
-    # 3. Validar Rol
     usuario = verUsuarioPorEmpleado(id_empleado)
     if not usuario:
         print("ERROR: Este empleado no tiene un usuario asociado.")

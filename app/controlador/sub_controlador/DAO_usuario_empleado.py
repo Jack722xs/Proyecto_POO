@@ -7,7 +7,7 @@ def asignarUsuarioAEmpleado(nombre_usuario, id_empleado):
         cone = getConexion()
         cursor = cone.cursor()
 
-        # 1. Obtener rol del usuario
+
         cursor.execute("SELECT rol FROM usuario WHERE nombre_usuario=%s", (nombre_usuario,))
         row = cursor.fetchone()
 
@@ -17,14 +17,14 @@ def asignarUsuarioAEmpleado(nombre_usuario, id_empleado):
 
         rol_usuario = row[0].lower()
 
-        # 2. Asignar usuario al empleado
+
         cursor.execute("""
             UPDATE usuario 
             SET id_empleado = %s
             WHERE nombre_usuario = %s
         """, (id_empleado, nombre_usuario))
 
-        # 3. Sincronizar booleano del empleado
+ 
         es_gerente = (rol_usuario == "gerente")
 
         cursor.execute("""
@@ -50,21 +50,18 @@ def quitarUsuarioDeEmpleado(nombre_usuario):
         cone = getConexion()
         cursor = cone.cursor()
 
-        # obtener empleado asociado
         cursor.execute("SELECT id_empleado FROM usuario WHERE nombre_usuario=%s", (nombre_usuario,))
         row = cursor.fetchone()
 
         if row and row[0] is not None:
             id_empleado = row[0]
 
-            # deja de ser gerente si se desvincula
             cursor.execute("""
                 UPDATE empleado
                 SET es_gerente = False
                 WHERE id_empleado = %s
             """, (id_empleado,))
 
-        # eliminar la relación
         cursor.execute("""
             UPDATE usuario 
             SET id_empleado = NULL

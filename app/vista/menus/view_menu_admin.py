@@ -80,8 +80,6 @@ def menu_admin():
 #   MENU DEPARTAMENTOS
 # -----------------------------
 def menu_departamentos():
-    # ... (El código de menu_departamentos se mantiene IGUAL que en la respuesta anterior) ...
-    # (Por brevedad, asumo que ya lo tienes corregido. Si necesitas que lo repita, avísame)
     while True:
         saltar_pantalla() 
         print("""
@@ -127,7 +125,6 @@ def menu_departamentos():
                 input("Presiona Enter...")
                 continue
 
-            # Validación de existencia aquí también recomendada
             if not verEmpleadoPorID(id_emp):
                 print(f"Error: Empleado {id_emp} no existe.")
                 input("Presiona Enter...")
@@ -239,7 +236,7 @@ def menu_departamentos():
 
 
 # -----------------------------
-#   MENU EMPLEADOS (CORREGIDO)
+#   MENU EMPLEADOS
 # -----------------------------
 
 def menu_empleados():
@@ -279,9 +276,7 @@ def menu_empleados():
         elif opc == 4:
             readEmpleado()
 
-        # --- OPCIÓN 5 CORREGIDA (Tu petición actual) ---
         elif opc == 5:
-            # 1. Seleccionar Empleado
             saltar_pantalla()
             print("============================================")
             print("           SELECCIÓN DE EMPLEADO            ")
@@ -294,19 +289,16 @@ def menu_empleados():
                 input("Presiona Enter...")
                 continue
 
-            # VALIDACIÓN DE EXISTENCIA (Para no saltar a proyectos si falla)
             if not verEmpleadoPorID(id_emp):
                 print(f"ERROR: El empleado con ID '{id_emp}' NO existe.")
                 input("Presiona Enter para volver...")
                 continue
 
-            # 2. Seleccionar Proyecto (Ahora con indicador claro)
             saltar_pantalla()
             print("============================================")
             print("           SELECCIÓN DE PROYECTO            ")
             print("============================================")
             
-            # --- INDICADOR NUEVO ---
             print("\n--- PROYECTOS DISPONIBLES ---") 
             readProyecto(pausar=False)
             
@@ -317,13 +309,11 @@ def menu_empleados():
                 input("Presiona Enter...")
                 continue
 
-            # VALIDACIÓN DE PROYECTO
             if not verProyecto(id_proj):
                 print(f"ERROR: El proyecto con ID '{id_proj}' NO existe.")
                 input("Presiona Enter para volver...")
                 continue
 
-            # 3. Asignar
             print("-" * 40)
             if asignarEmpleadoAProyecto(id_emp, id_proj):
                 print(f"¡ÉXITO! Empleado {id_emp} asignado correctamente al proyecto {id_proj}.")
@@ -578,8 +568,6 @@ def menu_proyectos():
             input("Presiona Enter para continuar...")
 
 
-# (Mantener menu_usuarios y menu_registro_tiempo como estaban...)
-# ... (Resto de funciones) ...
 def menu_usuarios():
     while True:
         saltar_pantalla()
@@ -609,17 +597,15 @@ def menu_usuarios():
         
         if opc == 1: addUsuario()
         elif opc == 2: readUsuario()
-        elif opc == 3: editUsuario() # Ahora usa la versión corregida de view_usuario.py
+        elif opc == 3: editUsuario() 
         elif opc == 4: delUsuario()
         
-        # --- OPCIÓN 5: ASIGNAR USUARIO A EMPLEADO ---
         elif opc == 5:
             saltar_pantalla()
             print("============================================")
             print("         ASIGNAR USUARIO A EMPLEADO         ")
             print("============================================")
             
-            # 1. Seleccionar Usuario
             print("\n--- LISTA DE USUARIOS ---")
             readUsuario(pausar=False)
             nombre_usuario = input("\nIngrese Nombre de Usuario: ").strip()
@@ -629,15 +615,12 @@ def menu_usuarios():
                 input("Presiona Enter...")
                 continue
             
-            # (Validación simple: verificamos si existe en la lista recuperada o confiamos en el DAO)
-            # Para mejor UX, validamos antes de seguir:
             usuarios = verUsuario()
             if not any(u[1] == nombre_usuario for u in usuarios):
                 print(f"Error: El usuario '{nombre_usuario}' no existe.")
                 input("Presiona Enter...")
                 continue
 
-            # 2. Seleccionar Empleado
             saltar_pantalla()
             print("============================================")
             print("           SELECCIÓN DE EMPLEADO            ")
@@ -655,15 +638,9 @@ def menu_usuarios():
                 input("Presiona Enter...")
                 continue
 
-            # 3. Vincular (Actualizamos el usuario poniéndole el ID empleado)
-            # Como editarUsuario pide todo el objeto, necesitamos los datos actuales del usuario.
-            # Buscamos el usuario específico
             usuario_actual = next((u for u in usuarios if u[1] == nombre_usuario), None)
             
             if usuario_actual:
-                # usuario_actual: (email, nombre, hash, rol, id_emp_actual)
-                # Creamos objeto con el NUEVO id_empleado
-                # Nota: usuario_actual[2] es el hash, lo pasamos tal cual para no cambiar la clave
                 usu_obj = Usuario(nombre_usuario, usuario_actual[0], usuario_actual[2], id_emp, usuario_actual[3])
                 
                 print("-" * 40)
@@ -676,14 +653,12 @@ def menu_usuarios():
 
             input("Presiona Enter para continuar...")
 
-        # --- OPCIÓN 6: QUITAR USUARIO DE EMPLEADO ---
         elif opc == 6:
             saltar_pantalla()
             print("============================================")
             print("         DESVINCULAR USUARIO DE EMPLEADO    ")
             print("============================================")
             
-            # Mostramos usuarios que TIENEN empleado asignado
             usuarios = verUsuario()
             usuarios_vinculados = [u for u in usuarios if u[4] is not None]
 
@@ -705,10 +680,8 @@ def menu_usuarios():
             if nombre_usuario not in lista_nombres_validos:
                 print("Error: Usuario no válido o no tiene vinculación.")
             else:
-                # Recuperamos datos para update
                 usuario_actual = next((u for u in usuarios if u[1] == nombre_usuario), None)
                 if usuario_actual:
-                    # Pasamos None como id_empleado
                     usu_obj = Usuario(nombre_usuario, usuario_actual[0], usuario_actual[2], None, usuario_actual[3])
                     if editarUsuario(usu_obj):
                         print(f"Vinculación eliminada para '{nombre_usuario}'.")
@@ -717,7 +690,6 @@ def menu_usuarios():
             
             input("Presiona Enter para continuar...")
 
-        # --- OPCIÓN 7: VER EMPLEADO ASOCIADO ---
         elif opc == 7:
             saltar_pantalla()
             print("============================================")
@@ -730,7 +702,6 @@ def menu_usuarios():
             if not nombre_usuario:
                 print("Error: Vacío.")
             else:
-                # Buscamos en la lista
                 usuarios = verUsuario()
                 usuario_target = next((u for u in usuarios if u[1] == nombre_usuario), None)
                 
@@ -741,7 +712,6 @@ def menu_usuarios():
                     if not id_emp:
                         print(f"El usuario '{nombre_usuario}' NO tiene empleado asociado.")
                     else:
-                        # Buscamos datos del empleado para mostrar detalle
                         emp = verEmpleadoPorID(id_emp)
                         print("-" * 40)
                         if emp:

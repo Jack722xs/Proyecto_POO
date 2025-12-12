@@ -12,9 +12,7 @@ def input_no_vacio(mensaje, max_intentos=5):
     print("Demasiados intentos fallidos. Operación cancelada.")
     return None
 
-# ========================================================
-# OPCIÓN 1: AGREGAR EMPLEADO
-# ========================================================
+
 def addEmpleado():
     while True:
         saltar_pantalla()
@@ -22,7 +20,6 @@ def addEmpleado():
         print("             AGREGAR EMPLEADO               ")
         print("============================================")
         
-        # Validación de ID numérico
         val_id = input_no_vacio("Ingrese ID (Numérico): ")
         if val_id is None: break
         
@@ -33,7 +30,6 @@ def addEmpleado():
             
         id_empleado = int(val_id)
         
-        # Resto de datos
         nombre = input_no_vacio("Nombre: ")
         if nombre is None: break
         
@@ -46,7 +42,6 @@ def addEmpleado():
         email = input_no_vacio("Email: ")
         if email is None: break
         
-        # Validación básica de salario
         salario_str = input_no_vacio("Salario: ")
         if salario_str is None: break
         try:
@@ -59,7 +54,6 @@ def addEmpleado():
         telefono = input("Teléfono (opcional): ").strip()
         if telefono == "": telefono = None
 
-        # Creación del objeto (es_gerente por defecto False, se asigna en otra opción)
         emp = empleado(id_empleado, nombre, apellido, direccion, email, salario, telefono)
         
         print("-" * 40)
@@ -73,9 +67,6 @@ def addEmpleado():
         if opcion != "s":
             break
 
-# ========================================================
-# OPCIÓN 2: EDITAR EMPLEADO
-# ========================================================
 def editEmpleado():
     saltar_pantalla()
     print("============================================")
@@ -135,7 +126,6 @@ def editEmpleado():
     telefono = input("Nuevo Teléfono (opcional): ").strip()
     if telefono == "": telefono = None
 
-    # Objeto actualizado
     emp = empleado(id_empleado, nombre, apellido, direccion, email, salario, telefono)
 
     print("-" * 40)
@@ -146,9 +136,7 @@ def editEmpleado():
     
     input("Presiona Enter para continuar...")
 
-# ========================================================
-# OPCIÓN 3: ELIMINAR EMPLEADO
-# ========================================================
+
 def delEmpleado():
     saltar_pantalla()
     print("============================================")
@@ -175,9 +163,7 @@ def delEmpleado():
         
     input("Presiona Enter para continuar...")    
 
-# ========================================================
-# OPCIÓN 4: VER EMPLEADOS
-# ========================================================
+
 def readEmpleado(pausar=True):
     if pausar:
         saltar_pantalla()
@@ -190,20 +176,15 @@ def readEmpleado(pausar=True):
     if not empleados:
         print("\nNo hay empleados registrados.\n")
     else:
-        # Encabezado formateado
         print(f"{'ID':<12} {'Nombre':<12} {'Apellido':<12} {'Email':<25} {'Salario':<10} {'Gerente'}")
         print("="*85)
 
         for emp in empleados:
-            # Índices basados en la consulta SELECT o estructura de tabla
-            # Ajustar según tu DAO (0:id, 1:nombre, 2:apellido, 4:email, 5:salario, 7:es_gerente)
             id_emp = str(emp[0])
             nombre = str(emp[1])
             apellido = str(emp[2])
             email = str(emp[4])
             salario = str(emp[5])
-            
-            # Manejo seguro del booleano gerente (puede venir como 1/0 o True/False)
             es_gerente = "Si" if emp[7] else "No"
 
             print(f"{id_emp:<12} {nombre:<12} {apellido:<12} {email:<25} {salario:<10} {es_gerente}")

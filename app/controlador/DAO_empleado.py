@@ -38,7 +38,7 @@ def editarEmpleado(emp: empleado):
         cursor.execute(sql, (emp.get_nombre(), emp.get_apellido(), emp.get_direccion(), emp.get_email(), emp.get_salario(), emp.get_telefono(), emp.get_id_empleado()))
         cone.commit()
         
-        filas = cursor.rowcount # CORRECCIÓN
+        filas = cursor.rowcount 
         cursor.close()
         cone.close()
         return filas > 0
@@ -55,7 +55,7 @@ def eliminarEmpleado(id_empleado: str):
         cursor.execute(sql, (id_empleado,))
         cone.commit()
         
-        filas = cursor.rowcount # CORRECCIÓN
+        filas = cursor.rowcount
         cursor.close()
         cone.close()
         return filas > 0

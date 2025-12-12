@@ -2,7 +2,6 @@ from app.bbdd.conexion import getConexion
 import mysql.connector
 
 
-# ASIGNAR EMPLEADO A PROYECTO (MANY TO MANY)
 def asignarEmpleadoAProyecto(id_empleado, id_proyecto):
     try:
         sql = "INSERT INTO empleado_proyecto (id_empleado, id_proyecto) VALUES (%s, %s)"
@@ -15,7 +14,6 @@ def asignarEmpleadoAProyecto(id_empleado, id_proyecto):
         return True
 
     except mysql.connector.Error as ex:
-        # Evitamos error de "duplicado"
         if ex.errno == 1062:
             print("El empleado ya estaba asignado a este proyecto.")
             return True
@@ -23,7 +21,6 @@ def asignarEmpleadoAProyecto(id_empleado, id_proyecto):
         return False
 
 
-# QUITAR EMPLEADO DE PROYECTO
 def quitarEmpleadoDeProyecto(id_empleado, id_proyecto):
     try:
         sql = "DELETE FROM empleado_proyecto WHERE id_empleado=%s AND id_proyecto=%s"
@@ -40,7 +37,6 @@ def quitarEmpleadoDeProyecto(id_empleado, id_proyecto):
         return False
 
 
-# VER EMPLEADOS DE UN PROYECTO
 def verEmpleadosDeProyecto(id_proyecto):
     try:
         sql = """SELECT empleado.* 
@@ -61,7 +57,6 @@ def verEmpleadosDeProyecto(id_proyecto):
         return []
 
 
-# VER PROYECTOS DE UN EMPLEADO
 def verProyectosDeEmpleado(id_empleado):
     try:
         sql = """SELECT proyecto.* 

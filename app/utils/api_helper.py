@@ -1,7 +1,7 @@
 import requests
 import json
 
-# == MINDICADOR ==
+# = MINDICADOR ==
 def consultar_api_mindicador(codigo_indicador, fecha=None):
     url = f"https://mindicador.cl/api/{codigo_indicador}"
     if fecha:
@@ -16,7 +16,7 @@ def consultar_api_mindicador(codigo_indicador, fecha=None):
     except Exception as e:
         return None, f"Error de conexión: {e}"
 
-# == JSONPLACEHOLDER ==
+#  JSONPLACEHOLDER 
 def obtener_socios_externos_api():
     url = "https://jsonplaceholder.typicode.com/users"
     try:

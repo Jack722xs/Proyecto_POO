@@ -4,7 +4,6 @@ from app.vista.view_informe import menu_informes
 from app.vista.view_registro_tiempo import addRegistroTiempo
 from app.utils.helper import *
 
-# Importamos DAOs necesarios
 from app.controlador.sub_controlador.DAO_empleado_proyecto import asignarEmpleadoAProyecto, quitarEmpleadoDeProyecto, verProyectosDeEmpleado
 from app.controlador.sub_controlador.DAO_proyecto_departamento import verProyectosDeDepartamento
 from app.controlador.sub_controlador.DAO_empleado_departamento import verEmpleadosDeDepartamento
@@ -94,7 +93,6 @@ def ver_mi_departamento():
         print("No estás asignado como gerente de ningún departamento.")
     else:
         print(f"\nEstás administrando el departamento con ID: {id_dep}")
-        # Aquí podrías buscar el nombre del departamento si quisieras hacerlo más completo
     
     input("\nPresiona Enter para continuar...")
 
@@ -119,7 +117,6 @@ def ver_empleados_mi_departamento():
         print(f"\n{'ID':<12} {'Nombre':<15} {'Apellido':<15}")
         print("-" * 45)
         for e in empleados:
-            # e[0]=id, e[1]=nombre, e[2]=apellido
             print(f"{str(e[0]):<12} {e[1]:<15} {e[2]:<15}")
         print("-" * 45)
 
@@ -156,7 +153,6 @@ def ver_proyectos_mi_departamento():
 
 
 def asignarEmpleadoAProyecto_gerente():
-    # 1. Obtener Depto
     id_dep = obtener_departamento_del_gerente()
     if not id_dep:
         saltar_pantalla()
@@ -164,7 +160,6 @@ def asignarEmpleadoAProyecto_gerente():
         input("Presiona Enter...")
         return
 
-    # 2. Seleccionar Empleado (del departamento)
     saltar_pantalla()
     print("============================================")
     print("           SELECCIÓN DE EMPLEADO            ")
@@ -191,7 +186,6 @@ def asignarEmpleadoAProyecto_gerente():
         input("Presiona Enter...")
         return
 
-    # 3. Seleccionar Proyecto (del departamento)
     saltar_pantalla()
     print("============================================")
     print("           SELECCIÓN DE PROYECTO            ")
@@ -218,7 +212,6 @@ def asignarEmpleadoAProyecto_gerente():
         input("Presiona Enter...")
         return
 
-    # 4. Asignar
     print("-" * 40)
     if asignarEmpleadoAProyecto(id_emp, id_proj):
         print(f"¡ÉXITO! Empleado {id_emp} asignado al proyecto {id_proj}.")
@@ -229,7 +222,6 @@ def asignarEmpleadoAProyecto_gerente():
 
 
 def quitarEmpleadoDeProyecto_gerente():
-    # 1. Obtener Depto
     id_dep = obtener_departamento_del_gerente()
     if not id_dep:
         saltar_pantalla()
@@ -237,7 +229,6 @@ def quitarEmpleadoDeProyecto_gerente():
         input("Presiona Enter...")
         return
 
-    # 2. Seleccionar Empleado (del departamento)
     saltar_pantalla()
     print("============================================")
     print("      QUITAR EMPLEADO DE UN PROYECTO        ")
@@ -256,14 +247,12 @@ def quitarEmpleadoDeProyecto_gerente():
     
     id_emp = input("\nIngrese ID del empleado: ").strip()
     
-    # Validar que sea de su equipo
     ids_validos = [str(e[0]) for e in empleados]
     if id_emp not in ids_validos:
         print("Error: Ese empleado no pertenece a tu departamento.")
         input("Presiona Enter...")
         return
 
-    # 3. Mostrar proyectos de ESE empleado
     saltar_pantalla()
     print(f"============================================")
     print(f"   PROYECTOS DEL EMPLEADO {id_emp}         ")

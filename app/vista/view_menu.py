@@ -2,12 +2,12 @@ from app.vista.view_departamento import *
 from app.vista.view_empleado import *
 from app.vista.view_proyecto import *
 from app.vista.view_usuario import *
-from app.vista.view_informe import menu_informes  #  NUEVA LINEA
-from app.vista.view_registro_tiempo import * # NUEVA LINEA
+from app.vista.view_informe import menu_informes 
+from app.vista.view_registro_tiempo import * 
 from app.vista.sub_vista.view_usuario_empleado import *
 
 
-# Nuevas vistas de relaciones
+
 from app.controlador.sub_controlador.DAO_empleado_departamento import *
 from app.controlador.sub_controlador.DAO_empleado_proyecto import *
 from app.controlador.sub_controlador.DAO_proyecto_departamento import *
@@ -58,10 +58,6 @@ def menu_principal():
             print("Opcion invalida.")
 
 
-
-# -----------------------------
-#   MENU DEPARTAMENTOS
-# -----------------------------
 def menu_departamentos():
     while True:
         print("""
@@ -118,9 +114,6 @@ def menu_departamentos():
 
 
 
-# -----------------------------
-#   MENU EMPLEADOS
-# -----------------------------
 def menu_empleados():
     while True:
         print("""
@@ -167,11 +160,6 @@ def menu_empleados():
         else:
             print("Opcion invalida.")
 
-
-
-# -----------------------------
-#   MENU PROYECTOS
-# -----------------------------
 def menu_proyectos():
     while True:
         print("""
@@ -219,10 +207,6 @@ def menu_proyectos():
             print("Opcion invalida.")
 
 
-
-
-#   MENU USUARIOS
-
 def menu_usuarios():
     while True:
         print("""
@@ -263,9 +247,7 @@ def menu_usuarios():
         else:
             print("Opcion invalida.")
 
-# -----------------------------
-#   MENU REGISTRO TIEMPO
-# -----------------------------
+
 def menu_registro_tiempo():
     while True:
         print("""

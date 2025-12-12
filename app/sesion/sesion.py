@@ -1,6 +1,4 @@
-# ================================
-#   VARIABLES DE SESION GLOBAL
-# ================================
+
 
 # Usuario logeado (nombre_usuario)
 usuario_actual = None

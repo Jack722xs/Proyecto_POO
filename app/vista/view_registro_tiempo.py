@@ -2,7 +2,7 @@ from datetime import date
 from app.modelo.registro_tiempo import RegistroTiempo
 from app.controlador.DAO_registro_tiempo import agregarRegistro, verRegistrosPorEmpleado, verRegistrosPorProyecto
 from app.controlador.sub_controlador.DAO_empleado_proyecto import verProyectosDeEmpleado
-from app.vista.view_proyecto import readProyecto # Importamos para mostrar la lista
+from app.vista.view_proyecto import readProyecto 
 import app.sesion.sesion as sesion
 from app.utils.helper import *
 
@@ -19,7 +19,6 @@ def addRegistroTiempo():
         input("Presiona enter para continuar")
         return
 
-    # Obtener proyectos validos
     proyectos = verProyectosDeEmpleado(id_empleado)
 
     if not proyectos:
@@ -31,21 +30,16 @@ def addRegistroTiempo():
     print(f"{'ID':<12} {'Nombre del Proyecto'}")
     print("-" * 40)
     for p in proyectos:
-        # p[0]=id, p[1]=nombre
         print(f"{str(p[0]):<12} {p[1]}")
     print("=" * 40)
 
     id_proyecto = input("\nIngrese el ID del proyecto: ").strip()
-
-    # Validar que el proyecto SI pertenece al empleado
     proyectos_validos = [str(p[0]) for p in proyectos]
 
     if id_proyecto not in proyectos_validos:
         print("ERROR: Ese proyecto NO está asignado a ti (o no existe).")
         input("Presiona enter para continuar")
         return
-
-    # Validar horas
     try:
         entrada_horas = input("Horas trabajadas: ").strip()
         if not entrada_horas: return
@@ -95,11 +89,9 @@ def verRegistrosEmpleado():
     if not registros:
         print("No tienes registros de horas.")
     else:
-        # Ajustar índices según tu tabla (ej: fecha=3, horas=4, desc=5)
         print(f"{'Fecha':<12} {'Horas':<8} {'Descripción'}")
         print("-" * 60)
         for r in registros:
-            # Asumiendo r[3]=fecha, r[4]=horas, r[5]=descripcion
             fecha = str(r[3])
             horas = str(r[4])
             desc = str(r[5])
@@ -115,9 +107,8 @@ def verRegistrosProyecto():
     print("        VER REGISTROS POR PROYECTO          ")
     print("============================================")
     
-    # 1. MOSTRAR PROYECTOS DISPONIBLES
     print("\n--- PROYECTOS DISPONIBLES ---")
-    readProyecto(pausar=False) # Usa la vista existente para listar
+    readProyecto(pausar=False) 
     
     id_proj = input("\nIngrese ID del proyecto a consultar: ").strip()
     if not id_proj: 
@@ -133,7 +124,6 @@ def verRegistrosProyecto():
         print(f"{'Empleado':<10} {'Fecha':<12} {'Horas':<8} {'Descripción'}")
         print("-" * 70)
         for r in registros:
-            # Asumiendo r[1]=id_empleado, r[3]=fecha, r[4]=horas, r[5]=descripcion
             emp = str(r[1])
             fecha = str(r[3])
             horas = str(r[4])
@@ -143,9 +133,6 @@ def verRegistrosProyecto():
         
     input("Presiona enter para continuar")
 
-# ========================================================
-#  MENÚ REGISTRO TIEMPO
-# ========================================================
 def menu_registro_tiempo():
     while True:
         saltar_pantalla()

@@ -19,7 +19,6 @@ def menu_empleado():
 5. Salir
 """)
 
-        # Validación de seguridad de sesión
         if sesion.id_empleado_actual is None:
             print("\nERROR CRÍTICO: No hay un empleado asociado a este usuario.")
             print("Comuníquese con el administrador.")
@@ -54,7 +53,7 @@ def menu_empleado():
 
 
 # ==========================================================
-#   VER DATOS DEL EMPLEADO ACTUAL
+#   VER DATOS DEL EMPLEADO
 # ==========================================================
 def ver_mis_datos():
     saltar_pantalla()
@@ -68,8 +67,6 @@ def ver_mis_datos():
         if not datos:
             print("No se pudo obtener la información del empleado.")
         else:
-            # datos es una tupla, ajustamos índices según tu BD
-            # 0:id, 1:nombre, 2:apellido, 3:telefono, 4:email, 5:salario, 6:direc, 7:gerente
             
             print(f" ID:          {datos[0]}")
             print(f" Nombre:      {datos[1]}")
@@ -79,9 +76,6 @@ def ver_mis_datos():
             print(f" Dirección:   {datos[6]}")
             print(f" Cargo:       {'Gerente' if datos[7] else 'Empleado'}")
             
-            # Nota: El salario a veces es sensible, se muestra si se desea
-            # print(f" Salario:     ${datos[5]}") 
-
     except Exception as e:
         print(f"Error al obtener datos: {e}")
     
@@ -92,6 +86,7 @@ def ver_mis_datos():
 # ==========================================================
 #   VER PROYECTOS ASOCIADOS AL EMPLEADO ACTUAL
 # ==========================================================
+
 def ver_mis_proyectos():
     saltar_pantalla()
     print("============================================")
@@ -107,7 +102,6 @@ def ver_mis_proyectos():
             print(f"{'ID':<12} {'Nombre':<20} {'Estado'}")
             print("-" * 45)
             for p in proyectos:
-                # Asumiendo p[0]=id, p[1]=nombre, p[5]=estado
                 p_id = str(p[0])
                 p_nom = str(p[1])
                 p_est = str(p[5]) if len(p) > 5 else "N/A"

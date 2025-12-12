@@ -45,7 +45,7 @@ def verProyecto(id_proyecto):
         cone = getConexion()
         cursor = cone.cursor()
         cursor.execute(sql, (id_proyecto,))
-        datos = cursor.fetchall() # O fetchone si es por ID unico
+        datos = cursor.fetchall() 
         cursor.close()
         cone.close()
         return datos

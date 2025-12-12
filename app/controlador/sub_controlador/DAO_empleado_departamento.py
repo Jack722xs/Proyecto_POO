@@ -2,12 +2,10 @@ from app.bbdd.conexion import getConexion
 import mysql.connector
 
 
-# ASIGNAR EMPLEADO A DEPARTAMENTO
 def asignarEmpleadoADepartamento(id_empleado, id_depart):
     try:
         cone = getConexion()
         cursor = cone.cursor()
-        # CORREGIDO: Insertar en la tabla intermedia que acabamos de crear
         sql = "INSERT INTO empleado_departamento (id_empleado, id_depart) VALUES (%s, %s)"
         cursor.execute(sql, (id_empleado, id_depart))
         cone.commit()
@@ -18,8 +16,6 @@ def asignarEmpleadoADepartamento(id_empleado, id_depart):
         print(f"Error: {ex}")
         return False
     
-
-# QUITAR EMPLEADO DE DEPARTAMENTO
 def quitarEmpleadoDeDepartamento(id_empleado):
     try:
         sql = "DELETE FROM empleado_departamento WHERE id_empleado=%s"
@@ -35,13 +31,11 @@ def quitarEmpleadoDeDepartamento(id_empleado):
         return False
 
 
-# LISTAR EMPLEADOS DE UN DEPARTAMENTO
 def verEmpleadosDeDepartamento(id_depart):
     try:
         cone = getConexion()
         cursor = cone.cursor()
         
-        # CORRECCIÓN: Usamos INNER JOIN para conectar empleado con empleado_departamento
         sql = """
             SELECT e.* FROM empleado e
             INNER JOIN empleado_departamento ed ON e.id_empleado = ed.id_empleado

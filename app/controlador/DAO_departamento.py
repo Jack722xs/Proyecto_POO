@@ -15,7 +15,7 @@ def agregarDepartamento(dep: departamento):
             dep.get_id_depart(),
             dep.get_proposito_depart(),
             dep.get_nombre_depart(),
-            dep.get_gerente_asociado()  # normalmente None al crear
+            dep.get_gerente_asociado() 
         ))
         cone.commit()
         cursor.close()
@@ -50,7 +50,7 @@ def editarDepartamento(dep: departamento):
         cursor.execute(sql, (dep.get_proposito_depart(), dep.get_nombre_depart(), dep.get_id_depart()))
         cone.commit()
         
-        filas = cursor.rowcount # CORRECCIÓN
+        filas = cursor.rowcount 
         cursor.close()
         cone.close()
         return filas > 0
@@ -66,7 +66,7 @@ def eliminarDepartamento(id_depart: str):
         cursor.execute(sql, (id_depart,))
         cone.commit()
         
-        filas = cursor.rowcount # CORRECCIÓN
+        filas = cursor.rowcount
         cursor.close()
         cone.close()
         return filas > 0
